@@ -1,8 +1,12 @@
 // author: Raupe
 // task: C16A-1
 #include <stdio.h>
+#include <time.h>
 
 // Berechnung eines Fehlerquotienten
+
+//local header
+void jetzt ();
 
 int main (void)
 {
@@ -15,6 +19,7 @@ int main (void)
 	year = 2017;
 	
 	// Intro+ Input
+	jetzt ();
 	printf ("Initiale Fehlerquote: %g\n", fehlerQ);
 	printf ("Jedes Jahr erfolgt eine \nreduzierung um zehn Prozent\n");
 	
@@ -30,3 +35,8 @@ int main (void)
 	
 }
 
+void jetzt ()
+{
+	time_t j = time (NULL);
+	printf (ctime(&j));
+}
