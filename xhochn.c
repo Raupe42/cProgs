@@ -1,16 +1,45 @@
 // author: Raupe
 
 #include <stdio.h>
+#include <stdlib.h>
 
-int main (int x, int n)
+int main (int argc, char * argv []) //c count; v vlaues
 {
-    //VarDef + VarInit
-    long int ret = x;
-    int i = 0;
-
-    for (i = 0; i < n; i ++)
+    if (argc < 3)
     {
-        ret = ret * x;
+        printf ("Aufrufparam: x hoch n mit positievem x n");
+     return 1;
     }
-    printf ("%li", ret);
+   
+    //VarDef + VarInit
+    long int ret;
+    int i, x ,n;
+    i = 0;
+    x = atoi (argv [1]);
+    n = atoi (argv [2]);
+    ret = x;
+    if (n >= 1)
+    {
+        for (i = 1; i < n; i ++)
+            {
+                ret = ret * x;
+            }
+        printf ("%li", ret);
+    }
+    else
+    {
+        if (n == 0 && x != 0)
+        {
+            ret = 1;
+            printf ("x hoch 0 ist IMMER 1");
+        }
+        else
+        {
+            if (x == 0)
+                printf ("0 hoch 0 ist nicht definiert");
+            else
+                printf ("flasche Eingabe");
+        }
+    }
+    return 0;
 }
