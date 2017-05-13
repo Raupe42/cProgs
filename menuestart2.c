@@ -39,11 +39,11 @@ int main (void)
             printf ("3");
         }
         // Nur für Aufgabenteil b
-     /*   if (zahl > 3)     
+        if (zahl > 3 || zahl < 0)     
         {
-            printf ("Du bist bloed!\n");
+            printf ("Du bist bloed!\n\n");
             retVal = 1;
-      } */ 
+        }
     }while (zahl != 0);
    
     return retVal;
