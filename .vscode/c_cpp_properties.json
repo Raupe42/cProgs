@@ -11,7 +11,8 @@
                 "path": [
                     "/usr/include"
                 ]
-            }
+            },
+            "intelliSenseMode": "clang-x64"
         },
         {
             "name": "Linux",
@@ -24,7 +25,8 @@
                 "path": [
                     "/usr/include"
                 ]
-            }
+            },
+            "intelliSenseMode": "clang-x64"
         },
         {
             "name": "Win32",
@@ -39,7 +41,8 @@
                     "c:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include",
                     "c:/MinGW"
                 ]
-            }
+            },
+            "intelliSenseMode": "msvc-x64"
         }
     ]
 }

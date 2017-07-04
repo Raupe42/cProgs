@@ -13,10 +13,13 @@ some stuff to test
 //local header
 void consoleRefresh();
 void writeSomething();
+void rechnen ();
+void stackoverflow (int a);
 
 int main(void)
 {
-    consoleRefresh();
+    rechnen ();
+    //stackoverflow (0);
 }
 
 void consoleRefresh()
@@ -36,4 +39,34 @@ void writeSomething()
        
     }
      sleep (1);
+}
+
+void rechnen ()
+{
+    int a = 2;
+    double d = 3.5;
+    int b;
+
+    printf ("%g\n", 999.9);
+    b = a + d;
+    printf ("%i\n", b);
+}
+
+void rechnen2 ()
+{
+    int a = 2;
+    double d = 3.5;
+    int b;
+    printf ("%g\n", 999.9);
+    b = a + d;
+    printf ("%p\n", &b);
+    printf (">%g ## %p - %i ## %p <\n",b, &b, b, &b);
+
+}
+
+void stackoverflow (int a)
+{
+    printf ("a:%p\n",&a);
+    stackoverflow (a);
+    printf ("ende");
 }
