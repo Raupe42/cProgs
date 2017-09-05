@@ -9,6 +9,7 @@ some stuff to test
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <math.h>
 
 //local header
 void consoleRefresh();
