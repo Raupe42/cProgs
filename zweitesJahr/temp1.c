@@ -17,6 +17,7 @@ mit random Temp
 //Proto
 int rndm_int (int maxVal);
 void printBalken (int l);
+void erfasseTemp (int *pArr);
 //void WerteFuellen (int *Arr, int ArrLgth);
 
 //Prog
@@ -40,6 +41,8 @@ int main (void)
       printf (" %i,", Werte [i]);
   }
   printf ("\n");
+
+  //Eigentliche Aufgabe:
   for (i = 0; i < 24; i++)
   {
       printf ("%i:00 ", i);
@@ -47,7 +50,7 @@ int main (void)
       printf ("\n");
   }
 
-    
+ //   erfasseTemp(Werte);
 }
 
 /*
@@ -78,4 +81,9 @@ void printBalken (int l)
     {
         printf ("*");
     }
+}
+
+void erfasseTemp (int *pArr)
+{
+    printf ("%i", *(pArr));
 }
