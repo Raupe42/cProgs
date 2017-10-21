@@ -13,6 +13,9 @@ und Negativ
 #include <stdlib.h>
 #include <time.h>
 
+//defines
+#define TAGSTUNDEN 2401
+
 //Proto
 int rndm_int(int maxVal);
 void printBalken(int l, char sign);
@@ -26,21 +29,21 @@ int main(void)
 
     //End Random Init
     int i;
-    int Werte[24];
+    int Werte[TAGSTUNDEN];
     char sign = '0';
 
     erfasseTemp(Werte);
 
     //Ausgabe
     printf("Temp:");
-    for (i = 0; i < 24; i++)
+    for (i = 0; i < TAGSTUNDEN; i++)
     {
         printf(" %i,", Werte[i]);
     }
     printf("\n");
 
     //Eigentliche Aufgabe:
-    for (i = 0; i < 24; i++)
+    for (i = 0; i < TAGSTUNDEN; i++)
     {
         printf("%i:00 ", i);
         if (Werte[i]< 0)
@@ -78,7 +81,7 @@ void erfasseTemp(int *pArr)
     int i;
     // Werte = pArr;
     *pArr = rndm_int(5);       //Feld 0, Start Temp
-    for (i = 1; i < 24; i++)
+    for (i = 1; i < TAGSTUNDEN; i++)
     {
         // Werte[i] = Werte[i - 1] + (rndm_int(5) - 3);
         *(pArr + i) = *(pArr + i - 1) + (rndm_int(5) - 2);
