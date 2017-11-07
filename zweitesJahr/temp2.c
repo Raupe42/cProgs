@@ -14,7 +14,7 @@ und Negativ
 #include <time.h>
 
 //defines
-#define TAGSTUNDEN 2401
+#define TAGSTUNDEN 241
 
 //Proto
 int rndm_int(int maxVal);
