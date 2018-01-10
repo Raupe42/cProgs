@@ -20,4 +20,9 @@ int main (void)
     printf ("m%i", c);
     printf ("%i", sizeof (string));     //länge des arr
     gets (string);
+    while (d < 50)
+    {
+      printf ("%i", d);
+      d++;
+    }
 }

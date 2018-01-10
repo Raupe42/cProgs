@@ -19,6 +19,12 @@ i = 0;
         d = d + .1;
         i++;
     }
+    int x = 4;
+    {       
+        x = 5;
+    }
+
+    printf ("%i", x);
 }
 
 void WerteAuswserten ()
