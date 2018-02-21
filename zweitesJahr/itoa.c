@@ -79,9 +79,9 @@ char * beispiela()
 char * beispielb (int z2, int z1, int z0)
 {
     static char bString[80];
-    bString[0] = (z2 + '1' - 1);
-    bString[1] = (z1 + '1' - 1);
-    bString[2] = (z0 + '1' - 1);
+    bString[0] = (z2 + '0');
+    bString[1] = (z1 + '0');
+    bString[2] = (z0 + '0');
     return bString;
 }
 
@@ -136,7 +136,7 @@ char * utoa (unsigned int x)
 //*******************f)*******************f)*******************f)*******************f)*******************f)
 char * itoa (int x)
 {
-    static char eStr[80];
+    static char fStr[80];
     char temp[80];
     int i, j;
     char neg;
@@ -158,9 +158,9 @@ char * itoa (int x)
 
     for (j = 0; i >= 0 ; j ++)
     {
-        eStr[j] = temp[i];
+        fStr[j] = temp[i];
         i--;
     }
-    eStr[j] = '\0';
-    return eStr;
+    fStr[j] = '\0';
+    return fStr;
 }
