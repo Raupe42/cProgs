@@ -8,22 +8,18 @@ Aufgabe: Eingsbe einer Ziffer - Ausgabe der Widerstandsfarbe
 
 int main (void)
 {
-    char farbArr [11][10]={
-    "SW",
-    "BR",
-    "RT",
-    "OR",
-    "GE",
-    "GN",
-    "BL",
-    "VIO",
-    "GR",
-    "WS",
-    "unbekannt"};
+    int * pi;
+    int i;
+    char * pc;
+    char c;
 
-    char str [2];
-    int in;
-    printf ("Ziffer: ?\n");
-    scanf ("%i", &in);
-    printf("%s\n", farbArr[in]);
+
+    pc = &c;
+    *pc = '5';
+    //printf ("%c", c);
+    i = *pc;
+    //i = i - '0';
+    //oder
+    i = i - 48;
+    printf ("%i", i);
 }

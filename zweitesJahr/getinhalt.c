@@ -49,3 +49,9 @@ int main (void)
     return 0;
 }
 
+char * getinhalt (char * arr, char * land)
+{
+    char * p;
+    p = strtok (arr, "=");
+    
+}
