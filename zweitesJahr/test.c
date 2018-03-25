@@ -2,13 +2,7 @@
 
 int main (void)
 {
-    int i;
-    for (i = 0; i < 10000; i++)
-        printf("Hello World");
-    
-}
-
-    /* double d;
+    double d;
     double werte [32];
     int i;
 
@@ -37,5 +31,3 @@ void WerteAuswserten ()
 {
     //Array lesen und mit Werten arbeiten
 }
-
-*/
