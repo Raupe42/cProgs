@@ -59,7 +59,7 @@ int main (void)
     strftime(buffer,80,"%c", timer );
     printf("Date is: %s\n", buffer);
 
-    for (i = 32; i < 128; i++)
+    for (i = 0; i < 128; i++)
         putchar(-i);
 
 }
