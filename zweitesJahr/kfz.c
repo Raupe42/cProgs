@@ -21,14 +21,10 @@ int main (void)
 {
     char str [10];
     char * tok;
-    
     printf ("Bitte Kennzeichen eingeben");
-
     scanf ("%9[^\n]", str);
-
     tok = strtok (str, "- ");
     printf ("%s\n", auswahl (tok));
-
 }
 
 char * auswahl (char * input)
@@ -42,4 +38,16 @@ char * auswahl (char * input)
         strcat (auswahlRet, "Bielefeld");
     else 
         strcat (auswahlRet, "Nirgendwo");     
+}
+
+//Nur aus Spaß
+char * auswahl2 (char * input)
+{
+    static char auswahl2 [100] = "";
+
+    char orte [10] [2] [100];  //Index | kurz/ lang | Text
+    orte [0] [0] [0] = '\0';
+    strcat (orte [0] [0], "PB");
+    strcat (orte [0] [1], "Paderborn");
+    
 }
