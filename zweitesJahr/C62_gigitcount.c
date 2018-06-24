@@ -44,9 +44,10 @@ int main (void)
     data = fgetc (dm);
     while (data != EOF)
     {
-        count++;
+        if (data >= '0' && data <= '9')
+            count++;
         data = fgetc (dm);
     }
-    printf ("Zeichen: %i", count);
+    printf ("Zahlen: %i", count);
     return 0;
 }
