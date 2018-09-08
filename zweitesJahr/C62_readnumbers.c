@@ -88,7 +88,7 @@ int main(void)
             printf("%g\n", z[i]);
         }
     }
-
+    fclose (data);
     printf("Groesste Zahl: <<%g>>\n", max(z, actArr));
     printf("Kleinste Zahl: <<%g>>\n", min(z, actArr));
     printf("Arith. Mittel: <<%g>>\n", mittelwert(z, actArr));
