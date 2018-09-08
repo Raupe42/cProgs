@@ -2,6 +2,19 @@
 author: Raupe
 
 task:
+Das Programm wordcount.c soll die Worte einer Datei z¨ahlen.1 Als Wort dient jede Ansammlung
+von Zeichen, die durch ein oder mehrere Leerzeichen, Tabulatoren oder Zeilenumbruche ge- ¨
+trennt ist.
+a) Versuchen Sie zuerst, die Worte in einer Zeichenkette zu z¨ahlen. Dazu kann das folgende
+Zustandsdiagramm helfen:
+Wort Zwischenraum
+Buchstabe
+Leerzeichen
+Buchstabe Leerzeichen
+++wortzahl
+b) Jetzt k¨onnen Sie mit getchar() die Zeichen von der Tastatur einlesen und in diesem
+Datenstrom die Worte z¨ahlen.
+c) Im letzten Schritt lesen Sie mit fgetc() die Zeichen aus einer Datei ein.
 
 */
 

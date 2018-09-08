@@ -2,7 +2,9 @@
 author: Raupe
 
 task:
-
+Das Programm readnumbers.c soll aus einer Datei (Pfadname wird per Tastatur eingegeben)
+Zahlen einlesen (Kommazahlen sollen erlaubt sein). Die kleinste Zahl, die gr¨oßte Zahl und der
+arithmetische Mittelwert sollen berechnet und auf dem Bildschirm ausgegeben werden.
 */
 
 //defines
