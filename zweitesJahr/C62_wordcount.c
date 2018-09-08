@@ -69,6 +69,6 @@ int main(void)
     
 
         printf("%i", i);
-
+    fclose (data);
     return 0;
 }

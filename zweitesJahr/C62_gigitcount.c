@@ -49,5 +49,6 @@ int main (void)
         data = fgetc (dm);
     }
     printf ("Zahlen: %i", count);
+    fclose (dm);
     return 0;
 }
