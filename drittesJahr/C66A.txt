@@ -1,0 +1,21 @@
+a) anton ist ein Array [8] in einem Array [3] von int-Werten
+    ist ein Array von 8 Elementen mit einem Array von 3 Elementen vom Typ int
+b) berta ist ein Array [4] von Zeigern auf Char
+c) caesar ist ein Zeiger auf ein Array [20] von float
+d) dieter ist eine Funktion (int) mit RetVal int
+e) egon ist eine Funktion (void) mit RetVal char *
+f) franz ist ein Zeiger auf eine Funktion (void) mit RetVal int
+g) gustav ist ein Zeiger auf eine Funktion (char *) mit RetVal char *
+h) herbert ist ein Zeiger auf ein Array [] einer Funktion (double) mit RetVal double
+    herbert ist ein Array [] von Funktionszeigern auf Funktionen (double) mit RetVal double
+i) ida ist eine Funkton (int) mit RetVal Funktion (void) mit RetVal int
+j) jutta ist ein Zeiger auf eine Funktion (int) mit Rückgabewert Zeiger auf Funktion (void) und RetVal int
+
+
+
+2)  //nicht besprochen
+a) int ** klaus ;
+b) long *lars [5] [20];
+c) void * minna (double, double);
+d) double * [] nora ();
+e) void (*otto) (int)
