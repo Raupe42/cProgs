@@ -28,7 +28,7 @@ int main (void)
 int verglStr (const char * pa, const char * pb)
 {
    // printf ("%i    %i\n", *pa, *pb);
-   while (*pa == *pb)
+   while (*pa == *pb && *pa != 0 && *pb != 0)
    {
        pa += sizeof (char);
        pb += sizeof (char);
