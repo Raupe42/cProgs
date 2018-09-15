@@ -13,9 +13,9 @@ j) jutta ist ein Zeiger auf eine Funktion (int) mit Rückgabewert Zeiger auf Fun
 
 
 
-2)  //nicht besprochen
+2) 
 a) int ** klaus ;
 b) long *lars [5] [20];
 c) void * minna (double, double);
-d) double * [] nora ();
-e) void (*otto) (int)
+d) double (* nora ()) [];
+e) void (*otto) (int);
