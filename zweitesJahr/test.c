@@ -14,6 +14,7 @@ int main (void)
     double d;
     double werte [32];
     int i;
+    /*
     printf("%sred\n", KRED);
     printf("%sgreen\n", KGRN);
     printf("%syellow\n", KYEL);
@@ -49,4 +50,9 @@ i = 0;
 void WerteAuswserten ()
 {
     //Array lesen und mit Werten arbeiten
+}
+
+void riesenarr ()
+{
+    
 }

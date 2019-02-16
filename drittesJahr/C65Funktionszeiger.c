@@ -12,7 +12,7 @@ int main (void)
     clearfunk = &clear; //OHNE ()       //& ist optional
     //so wird die Startadresse der Funktion übergeben
 
-    (*clearfunk) () // Aufruf der Funktion die zuvor zugewiesen wurde
+    (*clearfunk) (); // Aufruf der Funktion die zuvor zugewiesen wurde
     // (* ... ) ist optional 
 
 
