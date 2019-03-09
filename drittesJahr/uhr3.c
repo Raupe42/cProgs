@@ -1,3 +1,6 @@
+//#include <gtk-3.0\gdk\gdk.h>
+//#include <gtk\gtk.h>
+//#include <_mingw.h>
 #include <gtk/gtk.h>
 #include <time.h>
   GtkWidget *etikett;

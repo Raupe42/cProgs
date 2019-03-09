@@ -1,0 +1,50 @@
+#!/bin/bash
+#
+# NAME 
+#   text2inc
+#
+# VERSION
+#
+# Vers Autor Datum      Aenderung
+# ---- ----- ---------- --------------------
+# 1.00 KUR   04.05.2017 Neu
+#
+###########################################################
+echo "text2inc liest eine Textdatei ein und"
+echo "baut daraus eine Include-Datei,      "
+echo "in der eine Variable mit dem Inhalt  "
+echo "der Textdatei definiert wird.        "
+###########################################################
+echo "Name der Textdatei (Eingabe):"
+read INFILE
+echo "Name der Include-Datei (Ausgabe):"
+read OUTFILE
+if [ ! -f "$INFILE" ]
+then 
+   echo "$INFILE existiert nicht."
+   exit 1
+fi
+if [ $INFILE == $OUTFILE ]
+then 
+   echo "Ein- und Ausgabedatei sind identisch. Das sollte"
+   echo "nicht so sein."
+   exit 2
+fi
+if [ -f "$OUTFILE" ]
+then
+   echo "$OUTFILE existiert bereist. Ueberschreiben (J/N)?" 
+   read
+   if [ ${REPLY:0:1} != "J" ]
+   then
+      exit 3
+   fi 
+fi
+echo "Name der Variablen:"
+read VARN
+###########################################################
+echo "const char *$VARN=" > "$OUTFILE"
+while read; 
+do 
+   echo "\"${REPLY//\"/\\\"}\""; 
+done < "$INFILE" >> "$OUTFILE"
+echo ";" >> "$OUTFILE"
