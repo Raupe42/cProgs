@@ -6,6 +6,8 @@ typedef struct gui_struct {
   GtkWidget* button1;
   GtkWidget* switch1;
   GtkWidget* progBar;
+  GtkWidget* drawArea1;
+  GtkWidegt* drawArea2;
 }gui_t;
 
 
@@ -24,6 +26,7 @@ void schalterGeklickt(GtkToggleButton *schalter, gpointer pointer)
 {
   gui_t* p_gui = pointer;
   g_print("%d\n", gtk_toggle_button_get_active(schalter));  //1 an 0 aus
+  
   //if (gtk_toggle_button_get_active(schalter))
     //gtk_progress_bar_pulse (GTK_PROGRESS_BAR(p_gui->progBar));
   //gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(p_gui->progBar),
@@ -31,6 +34,10 @@ void schalterGeklickt(GtkToggleButton *schalter, gpointer pointer)
   //g_print("Klick %g\n", gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR(p_gui->progBar)));
 }
 
+gboolean zeichnen0 (GtkWidget *flaeche, cairo_t *cr, gui_t gui)
+{
+    
+}
 
 
 int main(int argc, char *argv[])
@@ -61,6 +68,11 @@ int main(int argc, char *argv[])
 
   element = gtk_builder_get_object(baum, "progressbar1");
   gui.progBar = GTK_WIDGET(element);
+
+  gui.drawArea1 = gtk_builder_get_object(baum, "drawingarea1");
+  gui.drawArea2 = gtk_builder_get_object(baum, "drawingarea2");
+
+
 
   element=gtk_builder_get_object(baum, "window1");
   gtk_window_maximize(GTK_WINDOW(element));
