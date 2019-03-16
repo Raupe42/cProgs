@@ -1,4 +1,4 @@
-ZIEL=eigenesUI
+ZIEL=eigenesUI2
 # GTKVERSION=gtk+-2.0
 GTKVERSION=gtk+-3.0
 CFLAGS=`pkg-config --cflags --libs $(GTKVERSION)` #-rdynamic
