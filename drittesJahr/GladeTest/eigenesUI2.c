@@ -21,6 +21,7 @@ void knopfgeklickt(GtkWidget *knopf, gpointer pointer)
            gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR(p_gui->progBar))  + 0.1);
   //gtk_progress_bar_pulse (GTK_PROGRESS_BAR(p_gui->progBar));
   g_print("Klick %g\n", gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR(p_gui->progBar)));
+  
 }
 void schalterGeklickt(GtkToggleButton *schalter, gpointer pointer)
 {
