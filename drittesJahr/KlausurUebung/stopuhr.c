@@ -29,6 +29,8 @@ gboolean repaint (gpointer gp)
     gtk_label_set_text (GTK_LABEL (gui->etikettRemainTime), buffer);
     //gtk_label_set_text (GTK_LABEL (gui->etikettRemainTime), "9");
     //g_print ("tok\n");
+    if (!(gui->verbleibendeSekunden))
+        gtk_main_quit();
     return TRUE;
 }
 
@@ -41,7 +43,7 @@ void start (GtkWidget *buttonStart, gpointer gp)
     sprintf (buffer, "%i", gui->verbleibendeSekunden);
     gtk_label_set_text (GTK_LABEL (gui->etikettRemainTime), buffer);
 //dummy timer für aktualisierung der anzeige
-   gui->timerAnzeige = g_timeout_add (1000, G_CALLBACK (repaint), gui);
+   gui->timerAnzeige = g_timeout_add (1000, (repaint), gui);
 }
 
 int main (int argc, char *argv[])
@@ -55,7 +57,7 @@ int main (int argc, char *argv[])
     gtk_init(&argc, &argv);
 
     fenster = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    vBox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
+    vBox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
     etikettRemainTime = gtk_label_new ("zeit");
     buttonStart = gtk_button_new_with_label ("start");
     entryStartwert = gtk_entry_new ();

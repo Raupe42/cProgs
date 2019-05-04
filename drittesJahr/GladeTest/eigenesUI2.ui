@@ -2,6 +2,11 @@
 <interface>
   <requires lib="gtk+" version="2.24"/>
   <!-- interface-naming-policy project-wide -->
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="upper">10</property>
+    <property name="step_increment">10</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkWindow" id="window1">
     <property name="can_focus">False</property>
     <child>
@@ -10,12 +15,6 @@
         <property name="can_focus">False</property>
         <property name="n_rows">3</property>
         <property name="n_columns">3</property>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
         <child>
           <object class="GtkButton" id="button1">
             <property name="label" translatable="yes">button</property>
@@ -39,9 +38,6 @@
           </packing>
         </child>
         <child>
-          <placeholder/>
-        </child>
-        <child>
           <object class="GtkProgressBar" id="progressbar1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -52,9 +48,6 @@
             <property name="top_attach">2</property>
             <property name="bottom_attach">3</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
         </child>
         <child>
           <object class="GtkDrawingArea" id="drawingarea1">
@@ -76,6 +69,49 @@
             <property name="right_attach">2</property>
             <property name="top_attach">2</property>
             <property name="bottom_attach">3</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <object class="GtkVScale" id="vscale1">
+            <property name="width_request">0</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="adjustment">adjustment1</property>
+            <property name="lower_stepper_sensitivity">on</property>
+            <property name="upper_stepper_sensitivity">on</property>
+            <property name="show_fill_level">True</property>
+            <property name="fill_level">10</property>
+            <property name="round_digits">1</property>
+            <property name="digits">0</property>
+            <property name="value_pos">right</property>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="right_attach">3</property>
+            <property name="bottom_attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkVolumeButton" id="volumebutton1">
+            <property name="label" translatable="yes">button</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="has_tooltip">True</property>
+            <property name="relief">none</property>
+            <property name="focus_on_click">False</property>
+            <property name="orientation">vertical</property>
+            <property name="icons">audio-volume-muted
+audio-volume-high
+audio-volume-low
+audio-volume-medium</property>
+          </object>
+          <packing>
+            <property name="top_attach">1</property>
+            <property name="bottom_attach">2</property>
           </packing>
         </child>
       </object>
