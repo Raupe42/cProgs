@@ -506,6 +506,133 @@ int ausgabe(char worte[][WORTLEN], int pruefung)
 	
 }
 
+int ausgabeInStr(char worte[][WORTLEN], int pruefung, char * retStr)
+{
+	char ret[MAXOUT] = "", buff [MAXOUT];
+	int ring1, ring2, ring3 = 0, exp = 0, tempKoef = 0, i;
+	double mul, r, tol;
+	char expChar[5] = " kMG";
+	char mulStr[WORTLEN], tolStr[WORTLEN], rArt [WORTLEN];
+	switch (pruefung)
+	{
+	case 6: tempKoef = farbring2TK(worte[5]);
+	case 5: ring3 = farbringe2Ziffer(worte[2]);
+	case 4:
+		//printf("Eingabe korrekt\n\n");
+		ring1 = farbringe2Ziffer(worte[0]);
+		ring2 = farbringe2Ziffer(worte[1]);
+		if (pruefung >= 5)	//Metallschichtwiderstand
+		{
+			ring3 = farbringe2Ziffer(worte[2]);
+			mul = farbring2Multi(worte[3]);
+			strcpy(mulStr, worte[3]);
+			tol = farbring2Tolleranz(worte[4]);
+			strcpy(tolStr, worte[4]);
+			strcpy(rArt, "Metallschicht");
+
+			r = (ring1 * 100 + ring2*10 + ring3)*mul;
+		}
+		else				//Kohleschichtwiderstand
+		{
+			mul = farbring2Multi(worte[2]);
+			strcpy(mulStr, worte[2]);
+			tol = farbring2Tolleranz(worte[3]);
+			strcpy(tolStr, worte[3]);
+			r = (ring1 * 10 + ring2)*mul;
+			strcpy(rArt, "Kohle");
+		}
+		//printf("---|  %s  %s  %s    %s      |---\n", worte[0], worte[1], worte[2], worte[3]);
+		//Semigrafik des Widerstandes anzeigen
+/*
+		printf("---|");
+		for (i = 0; i < pruefung - 1; i++)	//ACHTUNG: i wird einmal nach dem for benötigt, dannach wieder frei
+		{
+			printf(("  %s "), worte[i]);
+		}
+		printf("    %s   |---\n", worte[i]);	//i wird benötigt
+*/
+		//Bei gültiger Eingabe Wert berechnen
+		if (ring1 > -1 && ring2 > -1 && ring3 > -1 && mul > -1 && tol > -1 && tempKoef > -1)
+		{
+			while (r >= 1000)
+			{
+				r = r / 1000;
+				exp++;
+			}
+			setlocale(LC_NUMERIC, "");	// Systemsprache
+			printf("Ein %swiderstand mit %g %cOhm",rArt, r, *(expChar + exp));
+
+			sprintf(buff, "Ein %swiderstand mit %g %cOhm", rArt, r, *(expChar + exp));
+			strcat(ret, buff);
+			//printf(" +/- %.f%%", tol);
+			printf(" \xF1 %.f%%", tol);
+			//sprintf(buff, "\xF1 %.f%%", tol);
+			sprintf(buff, " ± %.f%%", tol);
+			strcat(ret, buff);
+			if (tempKoef > 0)
+			{
+				printf(" TK \xF1%ippm /K", tempKoef);
+				sprintf(ret, " TK \xF1%ippm /K", tempKoef);
+			}
+			printf("\n\n");
+			printf("Der Widerstandswert liegt also zwischen %g %cOhm und %g %cOhm",  r* (1 - tol * 0.01), *(expChar + exp), r * (1+tol * 0.01), *(expChar + exp));
+			sprintf(buff, "\nDer Widerstandswert liegt also zwischen %g %cOhm und %g %cOhm",  r* (1 - tol * 0.01), *(expChar + exp), r * (1+tol * 0.01), *(expChar + exp));
+			strcat(ret, buff);
+			if (tempKoef > 0)
+				printf(" \xF1%ippm /K.\n", tempKoef);
+			else
+				printf("\n");
+			
+		}
+		else		//mindestens ein eingegebenes Wort konnte nicht zugeordnet werden
+		{
+			if (ring1 < 0)
+				printf("%s ist nicht als m\x94gliche Farbe definiert!\n", worte[0]);
+			else if (ring2 < 0)
+				printf("%s ist nicht als m\x94gliche Farbe definiert!\n", worte[1]);
+			else if (ring3 < 0)
+				printf("%s ist nicht als m\x94gliche Farbe definiert!\n", worte[2]);
+			else if (mul < 0)
+			{
+				if (mul == -1)
+					printf("%s ist als Multiplikator nicht zul\x84ssig\n",mulStr);
+				else if (mul == -2)
+					printf("%s ist nicht als m\x94gliche Farbe definiert!\n", mulStr);
+			}
+			else if (tol < 0)
+			{
+				if (tol == -1)
+					printf("%s ist als Tolleranzwert nicht zul\x84ssig\n", tolStr);
+				else if (tol == -2)
+					printf("%s ist nicht als m\x94gliche Farbe definiert!\n", tolStr);
+			}
+			printf("Mindestens eine der eingegebenen Farben existiert (in dieser Kombination) nicht.\n");
+			printf("korrektes Eingabebeispiel: \"braun-braun-schwarz-gold\"\n");
+		}
+		break;
+
+	case -2:
+		printf("Die Eingabe ist fehlerhaft (zu wenige Trennzeichen)\n");
+		break;
+	case -3:
+		printf("Die Eingabe ist fehlerhaft (zu viele Trennzeichen)\n");
+		break;
+	case -4:
+		printf("Die Eingabe enth\x84lt zu wenige Farbringe (ausreichend Trennzeichen)");
+		break;
+	default:
+		printf("schwerer Eingabefehler\n");
+	}
+	setlocale(LC_NUMERIC, "C");		//zurück zum ANSI-C Standard
+
+	strcpy(retStr, ret);
+	return 0;
+	
+}
+
+
+
+
 
 /*
 	Diese Funktion zeigt den Hilfetext an

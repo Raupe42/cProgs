@@ -6,6 +6,7 @@
 
 
 #define MAXINPUT 99
+#define MAXOUT 200
 #define WORTLEN 30
 #define VARIANTEN 8
 #define TRENNZEICHEN "-,/ "
@@ -22,6 +23,8 @@ void fuelleVglArr(char vglArr[][VARIANTEN][20]);
 void cpyArrOfStr(char dest[][20], char source[][20]);
 int inputPruefen(char * input);
 int ausgabe(char worte[][WORTLEN], int pruefung);
+
+int ausgabeInStr(char worte[][WORTLEN], int pruefung, char *retStr);
 
 char * eingabe(char inputStr[]);
 void hilfeAnzeigen();
