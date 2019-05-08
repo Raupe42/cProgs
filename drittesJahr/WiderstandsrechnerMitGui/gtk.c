@@ -31,7 +31,37 @@ void slider(GtkWidget *scale, gpointer daten)
     wert=gtk_range_get_value(GTK_RANGE(scale));
     g_print("Neuer Wert: %i \n", wert);             //Debug
     g_print("%s \n", p);                            //Debug
-
+    /*switch (wert)
+    {
+        case 0:
+            temp=black;break;
+        case 1:
+            temp=brown;break;
+        case 2:
+            temp=red;break;
+        case 3:
+            temp=orange;break;
+        case 4:
+            temp=yellow;break;
+        case 5:
+            temp=green;break;
+        case 6:
+            temp=blue;break;
+        case 7:
+            temp=violet;break;
+        case 8:
+            temp=grey;break;
+        case 9:
+            temp=white;break;
+        case 10:
+            temp=gold;break;
+        case 11:
+            temp=silver;break;
+        case 12:
+            temp=none;break;
+        default:
+            break;
+    }*/
     temp = *colors[wert];
     if(strcmp(p, "ring1")==0)
         gtk_widget_modify_bg(GTK_WIDGET(pgui->ring1_l), GTK_STATE_NORMAL, &temp);
@@ -43,31 +73,16 @@ void slider(GtkWidget *scale, gpointer daten)
         gtk_widget_modify_bg(GTK_WIDGET(pgui->ring4_l), GTK_STATE_NORMAL, &temp);
     if(strcmp(p, "ring5")==0)
         gtk_widget_modify_bg(GTK_WIDGET(pgui->ring5_l), GTK_STATE_NORMAL, &temp);
-    if(strcmp(p, "ring6")==0)                                                           //NEU
-        gtk_widget_modify_bg(GTK_WIDGET(pgui->ring6_l), GTK_STATE_NORMAL, &temp);       //NEU
 
     fuelleTerminal(pgui);
     berechnen(pgui);
 }
 
-void terminal(GtkWidget *entry, gpointer pgui)
+void terminal(GtkWidget *entry, gpointer muell)
 {
     const char *p;
-    char buffer[MAXINPUT];
-    int i;
     p=gtk_entry_get_text(GTK_ENTRY(entry));
-    strcpy(buffer, p);
     g_print("Eingabe: %s \n", p);
- berechnen(pgui);
-    for (i = 0; i < 6; i++)                 
-    {
-       // gtk_range_set_value(GTK_RANGE(((gui_t*)pgui)->scales[i]), ((gui_t*)pgui)->ringWerte [i]);
-        //slider(((gui_t*)pgui)->scales[i], pgui);
-        
-    }
-    gtk_entry_set_text(GTK_ENTRY(entry), buffer);
-
-   
 }
 
 void help(GtkWidget *button, gpointer muell)
@@ -103,7 +118,7 @@ void fuelleTerminal (gui_t* pgui)
     return; 
 }
 
-int main_gui(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
     int i;
     gui_t gui;
@@ -113,7 +128,6 @@ int main_gui(int argc, char* argv[])
     GtkWidget *ring3_s;
     GtkWidget *ring4_s;
     GtkWidget *ring5_s;
-    GtkWidget *ring6_s;             //NEU
     GtkWidget *heading;
     GtkWidget *entry;
     GtkWidget *b_help;
@@ -128,19 +142,15 @@ int main_gui(int argc, char* argv[])
     GtkWidget *empty4;
     GtkWidget *leg1;
     GtkWidget *leg2;
-    GtkWidget *v_frame;         //NEU
-    GtkWidget *h_scale;         //NEU
 
-    GdkColor black, beige, x_blue;                  //NEU angepasst
+    GdkColor black;
     gdk_color_parse("#000000", &black);
-    gdk_color_parse("#E1C699", &beige);             //NEU
-    gdk_color_parse("#00BFFF", &x_blue);            //NEU
 
     gtk_init(&argc, &argv);
     
     fenster=gtk_window_new(GTK_WINDOW_TOPLEVEL);
     v_box=gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
-    h_box=gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);               //NEU angepasst
+    h_box=gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
     heading=gtk_label_new("<big>Widerstandsrechner</big>");
     gtk_label_set_use_markup(GTK_LABEL(heading),TRUE);
 
@@ -155,80 +165,37 @@ int main_gui(int argc, char* argv[])
 
     gtk_widget_modify_bg(GTK_WIDGET(leg1), GTK_STATE_NORMAL, &black);
     gtk_widget_modify_bg(GTK_WIDGET(leg2), GTK_STATE_NORMAL, &black);
-    gtk_widget_set_size_request(leg1, 40, 5);                                   //NEU angepasst
-    gtk_widget_set_size_request(leg2, 40, 5);                                   //NEU angepasst
+    gtk_widget_set_size_request(leg1,20, 1);
+    gtk_widget_set_size_request(leg2,20, 1);
 
-    //NEU
-
-    v_frame=gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gui.t_frame=gtk_label_new("");
-    gui.b_frame=gtk_label_new("");
-    gui.l_frame=gtk_label_new("");
-    gui.r_frame=gtk_label_new("");
-
-    if (FALSE)           //if "Metallschicht"
-    {
-        gtk_widget_modify_bg(GTK_WIDGET(gui.t_frame), GTK_STATE_NORMAL, &x_blue);
-        gtk_widget_modify_bg(GTK_WIDGET(gui.b_frame), GTK_STATE_NORMAL, &x_blue);
-        gtk_widget_modify_bg(GTK_WIDGET(gui.l_frame), GTK_STATE_NORMAL, &x_blue);
-        gtk_widget_modify_bg(GTK_WIDGET(gui.r_frame), GTK_STATE_NORMAL, &x_blue);
-    }
-    else
-    {
-        gtk_widget_modify_bg(GTK_WIDGET(gui.t_frame), GTK_STATE_NORMAL, &beige);
-        gtk_widget_modify_bg(GTK_WIDGET(gui.b_frame), GTK_STATE_NORMAL, &beige);
-        gtk_widget_modify_bg(GTK_WIDGET(gui.l_frame), GTK_STATE_NORMAL, &beige);
-        gtk_widget_modify_bg(GTK_WIDGET(gui.r_frame), GTK_STATE_NORMAL, &beige);
-    }
-    
-    gtk_widget_set_size_request(gui.t_frame, -1, 5);
-    gtk_widget_set_size_request(gui.b_frame, -1, 5);
-    gtk_widget_set_size_request(gui.l_frame, 20, -1);
-    gtk_widget_set_size_request(gui.r_frame, 20, -1);
-
-    ///NEU_END
-    h_scale=gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);                         //NEU
     gui.ring1_l=gtk_label_new("");
     ring1_s=gtk_scale_new_with_range(GTK_ORIENTATION_VERTICAL,0,12,1);
-    gtk_range_set_value(GTK_RANGE(ring1_s), 1);
-    //gtk_scale_set_value_pos(GTK_SCALE(ring1_s),GTK_POS_BOTTOM);                 //Zahl nach unten?
-    gtk_scale_set_draw_value(GTK_SCALE(ring1_s), FALSE);                        //Zahl weg
+    gtk_scale_set_value_pos(GTK_SCALE(ring1_s),GTK_POS_BOTTOM);                 //Zahl nach unten?
     gtk_widget_set_name(ring1_s, "ring1");
     gui.ring2_l=gtk_label_new("");
     ring2_s=gtk_scale_new_with_range(GTK_ORIENTATION_VERTICAL,0,12,1);
-    //gtk_scale_set_value_pos(GTK_SCALE(ring2_s),GTK_POS_BOTTOM);                 //Zahl nach unten?
-    gtk_scale_set_draw_value(GTK_SCALE(ring2_s), FALSE);                        //Zahl weg
+    gtk_scale_set_value_pos(GTK_SCALE(ring2_s),GTK_POS_BOTTOM);                 //Zahl nach unten?
     gtk_widget_set_name(ring2_s, "ring2");
     gui.ring3_l=gtk_label_new("");
     ring3_s=gtk_scale_new_with_range(GTK_ORIENTATION_VERTICAL,0,12,1);
-    //gtk_scale_set_value_pos(GTK_SCALE(ring3_s),GTK_POS_BOTTOM);                 //Zahl nach unten?
-    gtk_scale_set_draw_value(GTK_SCALE(ring3_s), FALSE);                        //Zahl weg
+    gtk_scale_set_value_pos(GTK_SCALE(ring3_s),GTK_POS_BOTTOM);                 //Zahl nach unten?
     gtk_widget_set_name(ring3_s, "ring3");
     gui.ring4_l=gtk_label_new("");
     ring4_s=gtk_scale_new_with_range(GTK_ORIENTATION_VERTICAL,0,12,1);
-    //gtk_scale_set_value_pos(GTK_SCALE(ring4_s),GTK_POS_BOTTOM);                 //Zahl nach unten?
-    gtk_scale_set_draw_value(GTK_SCALE(ring4_s), FALSE);                        //Zahl weg
+    gtk_scale_set_value_pos(GTK_SCALE(ring4_s),GTK_POS_BOTTOM);                 //Zahl nach unten?
     gtk_range_set_value(GTK_RANGE(ring4_s), 12);
     gtk_widget_set_name(ring4_s, "ring4");
     gui.ring5_l=gtk_label_new("");
     ring5_s=gtk_scale_new_with_range(GTK_ORIENTATION_VERTICAL,0,12,1);
-    //gtk_scale_set_value_pos(GTK_SCALE(ring5_s),GTK_POS_BOTTOM);                 //Zahl nach unten?
-    gtk_scale_set_draw_value(GTK_SCALE(ring5_s), FALSE);                        //Zahl weg
+    gtk_scale_set_value_pos(GTK_SCALE(ring5_s),GTK_POS_BOTTOM);                 //Zahl nach unten?
     gtk_range_set_value(GTK_RANGE(ring5_s), 10);
     gtk_widget_set_name(ring5_s, "ring5");
-    gui.ring6_l=gtk_label_new("");
-    ring6_s=gtk_scale_new_with_range(GTK_ORIENTATION_VERTICAL,0,12,1);
-    //gtk_scale_set_value_pos(GTK_SCALE(ring6_s),GTK_POS_BOTTOM);                 //Zahl nach unten?
-    gtk_scale_set_draw_value(GTK_SCALE(ring6_s), FALSE);                        //Zahl weg
-    gtk_range_set_value(GTK_RANGE(ring6_s), 12);
-    gtk_widget_set_name(ring6_s, "ring6");
 
     gui.scales[0] = ring1_s;
     gui.scales[1] = ring2_s;
     gui.scales[2] = ring3_s;
     gui.scales[3] = ring4_s;
     gui.scales[4] = ring5_s;
-    gui.scales[5] = ring6_s;                //NEU
 
     
     gui.output = gtk_label_new("Ausgabe:");
@@ -241,46 +208,33 @@ int main_gui(int argc, char* argv[])
     h_box2=gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
     b_help=gtk_button_new_with_label("Hilfe");
 
-    gtk_window_set_default_size(GTK_WINDOW(fenster), 600, 300);                 //Defaultgröße des Fensters: Breite, Höhe
+    gtk_window_set_default_size(GTK_WINDOW(fenster), 500, 200);                 //Defaultgröße des Fensters: Breite, Höhe
     gtk_window_set_title(GTK_WINDOW(fenster), "Widerstandsrechner");
 
     gtk_container_add(GTK_CONTAINER(fenster), v_box);
     gtk_box_pack_start(GTK_BOX(v_box), heading, FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(v_box), h_box, TRUE, TRUE, 2);
 
-    gtk_box_pack_start(GTK_BOX(h_box), v_leg1, FALSE, FALSE, 0);            //NEU angepasst
-    gtk_box_pack_start(GTK_BOX(v_leg1), empty1, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(v_leg1), leg1, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(v_leg1), empty2, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(h_box), v_leg1,TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(v_leg1), empty1,TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(v_leg1), leg1,FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(v_leg1), empty2,TRUE, TRUE, 0);
 
-    //NEU
+    gtk_box_pack_start(GTK_BOX(h_box), gui.ring1_l,TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(h_box), ring1_s, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(h_box), gui.ring2_l,TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(h_box), ring2_s, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(h_box), gui.ring3_l,TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(h_box), ring3_s, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(h_box), gui.ring4_l,TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(h_box), ring4_s, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(h_box), gui.ring5_l,TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(h_box), ring5_s, FALSE, FALSE, 0);
 
-    gtk_box_pack_start(GTK_BOX(h_box), v_frame,TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(v_frame), gui.t_frame,FALSE, FALSE, 0);
-    
-    gtk_box_pack_start(GTK_BOX(v_frame), h_scale,TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(h_scale), gui.l_frame,FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(h_scale), gui.ring1_l,TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(h_scale), ring1_s, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(h_scale), gui.ring2_l,TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(h_scale), ring2_s, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(h_scale), gui.ring3_l,TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(h_scale), ring3_s, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(h_scale), gui.ring4_l,TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(h_scale), ring4_s, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(h_scale), gui.ring5_l,TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(h_scale), ring5_s, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(h_scale), gui.ring6_l,TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(h_scale), ring6_s, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(h_scale), gui.r_frame,FALSE, FALSE, 0);
-
-    gtk_box_pack_start(GTK_BOX(v_frame), gui.b_frame,FALSE, FALSE, 0);
-    //NEU END
-
-    gtk_box_pack_start(GTK_BOX(h_box), v_leg2, FALSE, FALSE, 0);           //NEU angepasst
-    gtk_box_pack_start(GTK_BOX(v_leg2), empty3, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(v_leg2), leg2, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(v_leg2), empty4, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(h_box), v_leg2,TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(v_leg2), empty3,TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(v_leg2), leg2,FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(v_leg2), empty4,TRUE, TRUE, 0);
 
     gtk_box_pack_start(GTK_BOX(v_box), gui.output, FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(v_box), h_box2, FALSE, FALSE, 2);
@@ -292,14 +246,13 @@ int main_gui(int argc, char* argv[])
     g_signal_connect(G_OBJECT(ring3_s), "value_changed", G_CALLBACK(slider), &gui);
     g_signal_connect(G_OBJECT(ring4_s), "value_changed", G_CALLBACK(slider), &gui);
     g_signal_connect(G_OBJECT(ring5_s), "value_changed", G_CALLBACK(slider), &gui);
-    g_signal_connect(G_OBJECT(ring6_s), "value_changed", G_CALLBACK(slider), &gui);     //NEU
-    g_signal_connect(G_OBJECT(entry), "activate", G_CALLBACK(terminal), &gui);          //ENTER-Taste zum "aktivieren"
+    g_signal_connect(G_OBJECT(entry), "activate", G_CALLBACK(terminal), NULL);          //ENTER-Taste zum "aktivieren"
     g_signal_connect(G_OBJECT(b_help), "clicked", G_CALLBACK(help), NULL);
     g_signal_connect(G_OBJECT(fenster), "delete-event", gtk_main_quit, NULL);
     
     gtk_widget_show_all(fenster);
 
-    for (i = 0; i < 6; i++)                 //NEU angepasst
+    for (i = 0; i < 5; i++)
     {
         slider(gui.scales[i], &gui);
     }
@@ -319,7 +272,6 @@ void berechnen (gui_t *pgui)
     char inStr[MAXINPUT + MAXOUT];
     int pruef;
 	char worte[6][WORTLEN];
-    int ringe[6];
     if (gtk_entry_get_text_length (GTK_ENTRY(pgui->terminal))<= MAXINPUT + MAXOUT)
     {
         strcpy (inStr, gtk_entry_get_text(GTK_ENTRY(pgui->terminal)));
@@ -329,7 +281,7 @@ void berechnen (gui_t *pgui)
 			aufteilen(inStr, worte, pruef);
 		}
 		//ausgabe(worte, pruef);
-        ausgabeInStr(worte, pruef, inStr, pgui->ringWerte);
+        ausgabeInStr(worte, pruef, inStr);
         gtk_label_set_text(GTK_LABEL(pgui->output), inStr);
     }
 }

@@ -24,7 +24,7 @@ void cpyArrOfStr(char dest[][20], char source[][20]);
 int inputPruefen(char * input);
 int ausgabe(char worte[][WORTLEN], int pruefung);
 
-int ausgabeInStr(char worte[][WORTLEN], int pruefung, char *retStr);
+int ausgabeInStr(char worte[][WORTLEN], int pruefung, char *retStr, int ringe[6]);
 
 char * eingabe(char inputStr[]);
 void hilfeAnzeigen();

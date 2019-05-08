@@ -507,7 +507,7 @@ int ausgabe(char worte[][WORTLEN], int pruefung)
 	
 }
 
-int ausgabeInStr(char worte[][WORTLEN], int pruefung, char * retStr)
+int ausgabeInStr(char worte[][WORTLEN], int pruefung, char * retStr, int ringe [6])
 {
 	char ret[MAXOUT] = "", buff [MAXOUT];
 	int ring1, ring2, ring3 = 0, exp = 0, tempKoef = 0, i;
@@ -544,14 +544,14 @@ int ausgabeInStr(char worte[][WORTLEN], int pruefung, char * retStr)
 		}
 		//printf("---|  %s  %s  %s    %s      |---\n", worte[0], worte[1], worte[2], worte[3]);
 		//Semigrafik des Widerstandes anzeigen
-/*
+
 		printf("---|");
 		for (i = 0; i < pruefung - 1; i++)	//ACHTUNG: i wird einmal nach dem for benötigt, dannach wieder frei
 		{
 			printf(("  %s "), worte[i]);
 		}
 		printf("    %s   |---\n", worte[i]);	//i wird benötigt
-*/
+
 		//Bei gültiger Eingabe Wert berechnen
 		if (ring1 > -1 && ring2 > -1 && ring3 > -1 && mul > -1 && tol > -1 && tempKoef > -1)
 		{
@@ -667,8 +667,15 @@ int ausgabeInStr(char worte[][WORTLEN], int pruefung, char * retStr)
 	setlocale(LC_NUMERIC, "C");		//zurück zum ANSI-C Standard
 
 	strcpy(retStr, ret);
-	
-	return 0;
+/*
+	for (i = 0; i < 6; i++)
+	{
+		if (!strcmp (worte[i], ""))
+		ringe[i] = farbringe2Ziffer(worte[i]);
+		else
+			ringe[i] = 12;
+	}*/
+		return 0;
 	
 }
 
