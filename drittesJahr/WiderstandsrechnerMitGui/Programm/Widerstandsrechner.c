@@ -378,6 +378,7 @@ int inputPruefen(char * input)
 		i++;
 	}
 
+
 	return wortmenge;
 }
 
@@ -583,49 +584,90 @@ int ausgabeInStr(char worte[][WORTLEN], int pruefung, char * retStr)
 			else
 				printf("\n");
 			
+			//NEU
+			if (ring1 > 9)
+			{
+				printf("Der Widerstand sollte gedreht werden\n");
+				sprintf(buff, "Der Widerstand sollte gedreht werden...\n");
+				strcpy(ret, buff);
+			}
+
 		}
 		else		//mindestens ein eingegebenes Wort konnte nicht zugeordnet werden
 		{
 			if (ring1 < 0)
+			{
 				printf("%s ist nicht als m\x94gliche Farbe definiert!\n", worte[0]);
+				sprintf(buff, "%s ist nicht als m\x94gliche Farbe definiert!\n", worte[0]);
+			}
 			else if (ring2 < 0)
+			{
 				printf("%s ist nicht als m\x94gliche Farbe definiert!\n", worte[1]);
+				sprintf (buff, "%s ist nicht als m\x94gliche Farbe definiert!\n", worte[1]);
+			}
 			else if (ring3 < 0)
+			{
 				printf("%s ist nicht als m\x94gliche Farbe definiert!\n", worte[2]);
+				sprintf (buff, "%s ist nicht als m\x94gliche Farbe definiert!\n", worte[2]);
+			}
 			else if (mul < 0)
 			{
 				if (mul == -1)
+				{
 					printf("%s ist als Multiplikator nicht zul\x84ssig\n",mulStr);
+					sprintf (buff, "%s ist als Multiplikator nicht zul\x84ssig\n",mulStr);
+				}
 				else if (mul == -2)
+				{
 					printf("%s ist nicht als m\x94gliche Farbe definiert!\n", mulStr);
+					sprintf (buff, "%s ist nicht als m\x94gliche Farbe definiert!\n", mulStr);
+				}
 			}
 			else if (tol < 0)
 			{
 				if (tol == -1)
+				{
 					printf("%s ist als Tolleranzwert nicht zul\x84ssig\n", tolStr);
+					sprintf (buff, "%s ist als Tolleranzwert nicht zul\x84ssig\n", tolStr);
+				}
 				else if (tol == -2)
+				{
 					printf("%s ist nicht als m\x94gliche Farbe definiert!\n", tolStr);
+					sprintf (buff, "%s ist nicht als m\x94gliche Farbe definiert!\n", tolStr);
+				}
 			}
-			printf("Mindestens eine der eingegebenen Farben existiert (in dieser Kombination) nicht.\n");
-			printf("korrektes Eingabebeispiel: \"braun-braun-schwarz-gold\"\n");
+			printf("Mindestens eine der eingegebenen Farben existiert (in dieser Kombination) nicht.\n");	//?  diesen auch?
+			printf("korrektes Eingabebeispiel: \"braun-braun-schwarz-gold\"\n");							//?
+			
+			strcat(ret, buff);						
 		}
 		break;
 
 	case -2:
 		printf("Die Eingabe ist fehlerhaft (zu wenige Trennzeichen)\n");
+		sprintf (buff, "Die Eingabe ist fehlerhaft (zu wenige Trennzeichen)\n");
+		strcat(ret, buff);
 		break;
 	case -3:
 		printf("Die Eingabe ist fehlerhaft (zu viele Trennzeichen)\n");
+		sprintf (buff, "Die Eingabe ist fehlerhaft (zu viele Trennzeichen)\n");
+		strcat(ret, buff);
 		break;
 	case -4:
 		printf("Die Eingabe enth\x84lt zu wenige Farbringe (ausreichend Trennzeichen)");
+		sprintf (buff, "Die Eingabe enth\x84lt zu wenige Farbringe (ausreichend Trennzeichen)");
+		strcat(ret, buff);
 		break;
 	default:
 		printf("schwerer Eingabefehler\n");
+		sprintf (buff, "schwerer Eingabefehler\n");
+		strcpy(ret, buff);
 	}
+
 	setlocale(LC_NUMERIC, "C");		//zurück zum ANSI-C Standard
 
 	strcpy(retStr, ret);
+	
 	return 0;
 	
 }

@@ -15,3 +15,4 @@ typedef struct gui_struct
 
 } gui_t;
 
+int main_gui(int argc, char *argv[]);

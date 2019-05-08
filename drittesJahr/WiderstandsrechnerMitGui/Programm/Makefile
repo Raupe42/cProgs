@@ -4,7 +4,7 @@ GTKVERSION=gtk+-3.0
 CFLAGS=`pkg-config --cflags --libs $(GTKVERSION)` #-rdynamic
 
 $(ZIEL): $(ZIEL).c #*.ui
-	#gcc $(CFLAGS) -o $(ZIEL) $(ZIEL).c $(CFLAGS)
+
 	gcc $(CFLAGS) $(ZIEL).c $(CFLAGS)
 
 run: $(ZIEL)
