@@ -8,7 +8,7 @@ $(ZIEL): $(ZIEL).c #*.ui
 	gcc $(CFLAGS) $(ZIEL).c $(CFLAGS)
 
 run: $(ZIEL)
-	./$(ZIEL)
+	a.exe
 
 clean:
 	rm *~ a.out

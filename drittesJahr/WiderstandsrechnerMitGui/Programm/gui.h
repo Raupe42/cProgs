@@ -4,7 +4,7 @@
 
 typedef struct gui_struct
 {
-    GtkWidget* ring1_l;
+    GtkWidget* ring1_l;         //l (kleines L )- wie Label
     GtkWidget* ring2_l;
     GtkWidget* ring3_l;
     GtkWidget* ring4_l;
