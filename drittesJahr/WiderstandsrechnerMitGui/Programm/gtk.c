@@ -101,21 +101,29 @@ void fuelleTerminal (gui_t* pgui)
     gdouble wert;
     char str[80] = "";
     char colorStr[13][5] = {"bk", "bn", "rd", "or", "ye", "gn", "bl", "vio", "gy", "wh", "au", "ag", ""};
-    for (i = 0; i < 6; i++)
+   
+    
+     for (i = 0; i < 6; i++)
     {
          wert = gtk_range_get_value(GTK_RANGE(pgui->scales[i]));
          i_wert = wert;
          if (i < 5)
             next_wert = gtk_range_get_value(GTK_RANGE(pgui->scales[i+1]));
         // if (wert < 13)
-         strcat(str, colorStr [i_wert]);
+        if (i == 0 && i_wert == 12)
+        {
+            i_wert = 11;
+        }
+        if (strcmp ("", colorStr [i_wert]))
+            strcat(str, colorStr [i_wert]);
         if (i < 5)
         {
             //printf ("%i", next_wert);
-            if (strcmp ("", colorStr [i_wert]))
+            if (strcmp ("", colorStr [next_wert]))
                 strcat(str, "-");
         }
     }
+    
     gtk_entry_set_text(GTK_ENTRY(pgui->terminal), str);
     return; 
 }

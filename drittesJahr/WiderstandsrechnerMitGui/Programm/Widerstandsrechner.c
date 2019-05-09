@@ -573,7 +573,7 @@ int ausgabeInStr(char worte[][WORTLEN], int pruefung, char * retStr, int ringe [
 			if (tempKoef > 0)
 			{
 				printf(" TK \xF1%ippm /K", tempKoef);
-				sprintf(ret, " TK \xF1%ippm /K", tempKoef);
+				sprintf(ret, " TK ±%ippm /K", tempKoef);
 			}
 			printf("\n\n");
 			printf("Der Widerstandswert liegt also zwischen %g %cOhm und %g %cOhm",  r* (1 - tol * 0.01), *(expChar + exp), r * (1+tol * 0.01), *(expChar + exp));
@@ -598,42 +598,42 @@ int ausgabeInStr(char worte[][WORTLEN], int pruefung, char * retStr, int ringe [
 			if (ring1 < 0)
 			{
 				printf("%s ist nicht als m\x94gliche Farbe definiert!\n", worte[0]);
-				sprintf(buff, "%s ist nicht als m\x94gliche Farbe definiert!\n", worte[0]);
+				sprintf(buff, "%s ist nicht als mögliche Farbe definiert!\n", worte[0]);
 			}
 			else if (ring2 < 0)
 			{
 				printf("%s ist nicht als m\x94gliche Farbe definiert!\n", worte[1]);
-				sprintf (buff, "%s ist nicht als m\x94gliche Farbe definiert!\n", worte[1]);
+				sprintf (buff, "%s ist nicht als mögliche Farbe definiert!\n", worte[1]);
 			}
 			else if (ring3 < 0)
 			{
 				printf("%s ist nicht als m\x94gliche Farbe definiert!\n", worte[2]);
-				sprintf (buff, "%s ist nicht als m\x94gliche Farbe definiert!\n", worte[2]);
+				sprintf (buff, "%s ist nicht als mögliche Farbe definiert!\n", worte[2]);
 			}
 			else if (mul < 0)
 			{
 				if (mul == -1)
 				{
 					printf("%s ist als Multiplikator nicht zul\x84ssig\n",mulStr);
-					sprintf (buff, "%s ist als Multiplikator nicht zul\x84ssig\n",mulStr);
+					sprintf (buff, "%s ist als Multiplikator nicht zulässig\n",mulStr);
 				}
 				else if (mul == -2)
 				{
 					printf("%s ist nicht als m\x94gliche Farbe definiert!\n", mulStr);
-					sprintf (buff, "%s ist nicht als m\x94gliche Farbe definiert!\n", mulStr);
+					sprintf (buff, "%s ist nicht als mögliche Farbe definiert!\n", mulStr);
 				}
 			}
 			else if (tol < 0)
 			{
 				if (tol == -1)
 				{
-					printf("%s ist als Tolleranzwert nicht zul\x84ssig\n", tolStr);
-					sprintf (buff, "%s ist als Tolleranzwert nicht zul\x84ssig\n", tolStr);
+					printf("%s ist als Toleranzwert nicht zul\x84ssig\n", tolStr);
+					sprintf (buff, "%s ist als Toleranzwert nicht zulässig\n", tolStr);
 				}
 				else if (tol == -2)
 				{
 					printf("%s ist nicht als m\x94gliche Farbe definiert!\n", tolStr);
-					sprintf (buff, "%s ist nicht als m\x94gliche Farbe definiert!\n", tolStr);
+					sprintf (buff, "%s ist nicht als mögliche Farbe definiert!\n", tolStr);
 				}
 			}
 			printf("Mindestens eine der eingegebenen Farben existiert (in dieser Kombination) nicht.\n");	//?  diesen auch?
@@ -655,7 +655,7 @@ int ausgabeInStr(char worte[][WORTLEN], int pruefung, char * retStr, int ringe [
 		break;
 	case -4:
 		printf("Die Eingabe enth\x84lt zu wenige Farbringe (ausreichend Trennzeichen)");
-		sprintf (buff, "Die Eingabe enth\x84lt zu wenige Farbringe (ausreichend Trennzeichen)");
+		sprintf (buff, "Die Eingabe enthält zu wenige Farbringe (ausreichend Trennzeichen)");
 		strcat(ret, buff);
 		break;
 	default:
