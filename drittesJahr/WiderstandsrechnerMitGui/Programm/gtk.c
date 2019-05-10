@@ -8,7 +8,9 @@ void berechnen(gui_t *pgui);
 
 void slider(GtkWidget *scale, gpointer daten)
 {
+    GdkColor temp;
     //Farbzuweisung
+    /*
     GdkColor black, brown, red, orange, yellow, green, blue, violet, grey, white, gold, silver, none, temp;
     GdkColor *colors[] = {&black, &brown, &red, &orange, &yellow, &green, &blue, &violet, &grey, &white, &gold, &silver, &none};
     gdk_color_parse("#000000", &black);
@@ -24,6 +26,8 @@ void slider(GtkWidget *scale, gpointer daten)
     gdk_color_parse("#D4AF37", &gold);
     gdk_color_parse("#C0C0C0", &silver);
     gdk_color_parse("#F0F0F0", &none);              //so etwa normal?
+    */
+
     gui_t *pgui;
     int wert;
     pgui=daten;
@@ -32,7 +36,8 @@ void slider(GtkWidget *scale, gpointer daten)
     g_print("Neuer Wert: %i \n", wert);             //Debug
     g_print("%s \n", p);                            //Debug
 
-    temp = *colors[wert];
+    //temp = *colors[wert];
+    temp = pgui->colors[wert];
     if(strcmp(p, "ring1")==0)
         gtk_widget_modify_bg(GTK_WIDGET(pgui->ring1_l), GTK_STATE_NORMAL, &temp);
     if(strcmp(p, "ring2")==0)
@@ -50,7 +55,7 @@ void slider(GtkWidget *scale, gpointer daten)
     berechnen(pgui);
 }
 
-void terminal(GtkWidget *entry, gpointer pgui)
+void terminal(GtkWidget *entry, gui_t *pgui)
 {
     const char *p;
     char buffer[MAXINPUT];
@@ -58,16 +63,18 @@ void terminal(GtkWidget *entry, gpointer pgui)
     p=gtk_entry_get_text(GTK_ENTRY(entry));
     strcpy(buffer, p);
     g_print("Eingabe: %s \n", p);
- berechnen(pgui);
-    for (i = 0; i < 6; i++)                 
-    {
-        //gtk_range_set_value(GTK_RANGE(((gui_t*)pgui)->scales[i]), ((gui_t*)pgui)->ringWerte [i]);
-        //slider(((gui_t*)pgui)->scales[i], pgui);
-       // gtk_widget_modify_bg ();
-    }
+    berechnen(pgui);
+    
     gtk_entry_set_text(GTK_ENTRY(entry), buffer);
 
+    gtk_widget_modify_bg (pgui->ring1_l, GTK_STATE_NORMAL, &pgui->colors[ pgui->ringWerte[0]]);
+    gtk_widget_modify_bg (pgui->ring2_l, GTK_STATE_NORMAL, &pgui->colors[ pgui->ringWerte[1]]);
+    gtk_widget_modify_bg (pgui->ring3_l, GTK_STATE_NORMAL, &pgui->colors[ pgui->ringWerte[2]]);
+    gtk_widget_modify_bg (pgui->ring4_l, GTK_STATE_NORMAL, &pgui->colors[ pgui->ringWerte[3]]);
+    gtk_widget_modify_bg (pgui->ring5_l, GTK_STATE_NORMAL, &pgui->colors[ pgui->ringWerte[4]]);
+    gtk_widget_modify_bg (pgui->ring6_l, GTK_STATE_NORMAL, &pgui->colors[ pgui->ringWerte[5]]);
    
+    printf("\n-%i-\n", pgui->ringWerte[5]);
 }
 
 void help(GtkWidget *button, gpointer muell)
@@ -156,13 +163,16 @@ int main_gui(int argc, char* argv[])
     GtkWidget *v_frame;         //NEU
     GtkWidget *h_scale;         //NEU
 
-    GdkColor black, beige, x_blue;                  //NEU angepasst
+    /*
+    GdkColor black, beige, lBlue;                  //NEU angepasst
     gdk_color_parse("#000000", &black);
     gdk_color_parse("#E1C699", &beige);             //NEU
-    gdk_color_parse("#00BFFF", &x_blue);            //NEU
-
+    gdk_color_parse("#00BFFF", &lBlue);            //NEU
+*/
+    GdkColor *tmpColor;
     gtk_init(&argc, &argv);
-    
+    initColors(&gui);
+
     fenster=gtk_window_new(GTK_WINDOW_TOPLEVEL);
     v_box=gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
     h_box=gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);               //NEU angepasst
@@ -178,8 +188,8 @@ int main_gui(int argc, char* argv[])
     leg1=gtk_label_new("");
     leg2=gtk_label_new("");
 
-    gtk_widget_modify_bg(GTK_WIDGET(leg1), GTK_STATE_NORMAL, &black);
-    gtk_widget_modify_bg(GTK_WIDGET(leg2), GTK_STATE_NORMAL, &black);
+    gtk_widget_modify_bg(GTK_WIDGET(leg1), GTK_STATE_NORMAL, &gui.bg_colors[0]);
+    gtk_widget_modify_bg(GTK_WIDGET(leg2), GTK_STATE_NORMAL, &gui.bg_colors[0]);
     gtk_widget_set_size_request(leg1, 40, 5);                                   //NEU angepasst
     gtk_widget_set_size_request(leg2, 40, 5);                                   //NEU angepasst
 
@@ -193,17 +203,19 @@ int main_gui(int argc, char* argv[])
 
     if (FALSE)           //if "Metallschicht"
     {
-        gtk_widget_modify_bg(GTK_WIDGET(gui.t_frame), GTK_STATE_NORMAL, &x_blue);
-        gtk_widget_modify_bg(GTK_WIDGET(gui.b_frame), GTK_STATE_NORMAL, &x_blue);
-        gtk_widget_modify_bg(GTK_WIDGET(gui.l_frame), GTK_STATE_NORMAL, &x_blue);
-        gtk_widget_modify_bg(GTK_WIDGET(gui.r_frame), GTK_STATE_NORMAL, &x_blue);
+        tmpColor = &gui.bg_colors[2];    //hellblau
+        gtk_widget_modify_bg(GTK_WIDGET(gui.t_frame), GTK_STATE_NORMAL, tmpColor);
+        gtk_widget_modify_bg(GTK_WIDGET(gui.b_frame), GTK_STATE_NORMAL, tmpColor);
+        gtk_widget_modify_bg(GTK_WIDGET(gui.l_frame), GTK_STATE_NORMAL, tmpColor);
+        gtk_widget_modify_bg(GTK_WIDGET(gui.r_frame), GTK_STATE_NORMAL, tmpColor);
     }
     else
     {
-        gtk_widget_modify_bg(GTK_WIDGET(gui.t_frame), GTK_STATE_NORMAL, &beige);
-        gtk_widget_modify_bg(GTK_WIDGET(gui.b_frame), GTK_STATE_NORMAL, &beige);
-        gtk_widget_modify_bg(GTK_WIDGET(gui.l_frame), GTK_STATE_NORMAL, &beige);
-        gtk_widget_modify_bg(GTK_WIDGET(gui.r_frame), GTK_STATE_NORMAL, &beige);
+        tmpColor = &gui.bg_colors[1];    //beige
+        gtk_widget_modify_bg(GTK_WIDGET(gui.t_frame), GTK_STATE_NORMAL, tmpColor);
+        gtk_widget_modify_bg(GTK_WIDGET(gui.b_frame), GTK_STATE_NORMAL, tmpColor);
+        gtk_widget_modify_bg(GTK_WIDGET(gui.l_frame), GTK_STATE_NORMAL, tmpColor);
+        gtk_widget_modify_bg(GTK_WIDGET(gui.r_frame), GTK_STATE_NORMAL, tmpColor);
     }
     
     gtk_widget_set_size_request(gui.t_frame, -1, 5);
@@ -358,4 +370,39 @@ void berechnen (gui_t *pgui)
         ausgabeInStr(worte, pruef, inStr, pgui->ringWerte);
         gtk_label_set_text(GTK_LABEL(pgui->output), inStr);
     }
+}
+
+void initColors (gui_t *pgui)
+{
+    int i;
+    //Farbzuweisung
+    GdkColor black, brown, red, orange, yellow, green, blue, violet, grey, white, gold, silver, none, temp, beige, lBlue;
+    GdkColor *local_colors[] = {&black, &brown, &red, &orange, &yellow, &green, &blue, &violet, &grey, &white, &gold, &silver, &none, &black, &beige, &lBlue};
+    gdk_color_parse("#000000", &black);
+    gdk_color_parse("#8B4513", &brown);
+    gdk_color_parse("#FF0000", &red);
+    gdk_color_parse("#FFA500", &orange);
+    gdk_color_parse("#FFFF00", &yellow);
+    gdk_color_parse("#00FF00", &green);
+    gdk_color_parse("#0000FF", &blue);
+    gdk_color_parse("#8A2BE2", &violet);
+    gdk_color_parse("#BEBEBE", &grey);
+    gdk_color_parse("#FFFFFF", &white);
+    gdk_color_parse("#D4AF37", &gold);
+    gdk_color_parse("#C0C0C0", &silver);
+    gdk_color_parse("#F0F0F0", &none);              //so etwa normal?
+    
+    gdk_color_parse("#E1C699", &beige);             //NEU
+    gdk_color_parse("#00BFFF", &lBlue);            //NEU
+
+    for (i = 0; i < 13; i++)
+    {
+        pgui->colors[i] = *local_colors[i];
+    }
+    for (i = 0; i < 3; i++)
+    {
+        pgui->bg_colors[i] = *local_colors[i + 13];
+    }
+
+   
 }
