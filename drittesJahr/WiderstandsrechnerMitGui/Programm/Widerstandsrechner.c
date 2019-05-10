@@ -569,14 +569,19 @@ int ausgabeInStr(char worte[][WORTLEN], int pruefung, char *retStr, int ringe[])
 			if (tempKoef > 0)
 			{
 				printf(" TK \xF1%ippm /K", tempKoef);
-				sprintf(ret, " TK ±%ippm /K", tempKoef);
+				sprintf(buff, " TK ±%ippm /K", tempKoef);
+				strcat(ret, buff);
 			}
 			printf("\n\n");
 			printf("Der Widerstandswert liegt also zwischen %g %cOhm und %g %cOhm", r * (1 - tol * 0.01), *(expChar + exp), r * (1 + tol * 0.01), *(expChar + exp));
 			sprintf(buff, "\nDer Widerstandswert liegt also zwischen %g %cOhm und %g %cOhm", r * (1 - tol * 0.01), *(expChar + exp), r * (1 + tol * 0.01), *(expChar + exp));
 			strcat(ret, buff);
 			if (tempKoef > 0)
+			{
 				printf(" \xF1%ippm /K.\n", tempKoef);
+				sprintf(buff, " TK ±%ippm /K", tempKoef);
+				strcat(ret, buff);
+			}
 			else
 				printf("\n");
 
@@ -631,9 +636,23 @@ int ausgabeInStr(char worte[][WORTLEN], int pruefung, char *retStr, int ringe[])
 					sprintf(buff, "%s ist nicht als mögliche Farbe definiert!\n", tolStr);
 				}
 			}
+			else if (tempKoef < 0)
+			{
+				if (tempKoef == -1)
+				{
+					printf("%s ist als Temperaturkoeffizient nicht zul\x84ssig\n", worte[5]);
+					sprintf(buff, "%s ist als Temperaturkoeffizient nicht zulässig\n", worte[5]);
+				}
+				else if (tempKoef == -2)
+				{
+					printf("%s ist nicht als m\x94gliche Farbe definiert!\n",  worte[5]);
+					sprintf(buff, "%s ist nicht als mögliche Farbe definiert!\n",  worte[5]);
+				}
+			}
 			printf("Mindestens eine der eingegebenen Farben existiert (in dieser Kombination) nicht.\n"); //?  diesen auch?
 			printf("korrektes Eingabebeispiel: \"braun-braun-schwarz-gold\"\n");						  //?
 
+			//strcat(buff, "\n");
 			strcat(ret, buff);
 		}
 		break;

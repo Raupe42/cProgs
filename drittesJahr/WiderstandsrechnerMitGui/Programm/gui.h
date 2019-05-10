@@ -29,3 +29,4 @@ typedef struct gui_struct
 
 int main_gui(int argc, char *argv[]);
 void initColors(gui_t *pgui);
+void setzeRFarbe(gui_t *pgui, int ringzahl);

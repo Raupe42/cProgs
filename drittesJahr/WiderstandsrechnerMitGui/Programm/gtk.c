@@ -88,10 +88,14 @@ void help(GtkWidget *button, gpointer muell)
     gtk_window_set_title(GTK_WINDOW(help_window), "Hilfe");
     //label=gtk_label_new("H\nI\nL\nF\nE\n!");
 
-    strcat (buff, "<big>Hilfe\nFarben des Widerstandes an den Schieberegerln einstellen.\n");
+    strcat (buff, "<big>Widerstandsrechner V2.0\nDie Farben des Widerstandes an den Schiebereglern einstellen.\n");
     strcat (buff, "Das Ergebnis wird in unterschalb der Schieberegler angezeigt.\n");
-    strcat (buff, "\nAlteernativ kann das Programm auch über die Konsole bedient werden.\n");
+    strcat (buff, "\nAlternativ kann das Programm auch über die Konsole bedient werden.\n");
+    strcat (buff, "Das Terminal wird wie die Grundversion (Konsolenanwendung) bedient.\n");
     strcat (buff, "In die Terminal-Zeile die Farben (kürzel) eingeben und mit Enter akzeptieren.\n");
+    strcat (buff, "Es gelten weiterhin die deutschen und englischen Kurzzeichen der Farben.\n");
+    strcat (buff, "\n Special: Aufrufparameter \n-? oder -help : Anzeige der Hilfe\n");
+    strcat(buff, "-cmd : Aufrufen des Originalprogramms \"Widerstandsrechner\"\n");
     strcat (buff, "</big>");
 
     label=gtk_label_new("");
@@ -104,7 +108,8 @@ void help(GtkWidget *button, gpointer muell)
 
 void fuelleTerminal (gui_t* pgui)
 {
-    int i, i_wert, next_wert;
+    int i, i_wert, next_wert, ringzahl = 1;
+    GdkColor *tmpColor;
     gdouble wert;
     char str[80] = "";
     char colorStr[13][5] = {"bk", "bn", "rd", "or", "ye", "gn", "bl", "vio", "gy", "wh", "au", "ag", ""};
@@ -127,11 +132,16 @@ void fuelleTerminal (gui_t* pgui)
         {
             //printf ("%i", next_wert);
             if (strcmp ("", colorStr [next_wert]))
+            {
                 strcat(str, "-");
+                ringzahl++;
+            }
         }
     }
     
     gtk_entry_set_text(GTK_ENTRY(pgui->terminal), str);
+
+    
     return; 
 }
 
@@ -230,33 +240,39 @@ int main_gui(int argc, char* argv[])
     gtk_range_set_value(GTK_RANGE(ring1_s), 1);
     //gtk_scale_set_value_pos(GTK_SCALE(ring1_s),GTK_POS_BOTTOM);                 //Zahl nach unten?
     gtk_scale_set_draw_value(GTK_SCALE(ring1_s), FALSE);                        //Zahl weg
+    gtk_range_set_round_digits(GTK_RANGE(ring1_s), 0);    
     gtk_widget_set_name(ring1_s, "ring1");
     gui.ring2_l=gtk_label_new("");
     ring2_s=gtk_scale_new_with_range(GTK_ORIENTATION_VERTICAL,0,12,1);
     gtk_scale_set_value_pos(GTK_SCALE(ring2_s),GTK_POS_BOTTOM);                 //Zahl nach unten?
     gtk_scale_set_draw_value(GTK_SCALE(ring2_s), FALSE);                        //Zahl weg
+    gtk_range_set_round_digits(GTK_RANGE(ring2_s), 0);    
     gtk_widget_set_name(ring2_s, "ring2");
     gui.ring3_l=gtk_label_new("");
     ring3_s=gtk_scale_new_with_range(GTK_ORIENTATION_VERTICAL,0,12,1);
     //gtk_scale_set_value_pos(GTK_SCALE(ring3_s),GTK_POS_BOTTOM);                 //Zahl nach unten?
     gtk_scale_set_draw_value(GTK_SCALE(ring3_s), FALSE);                        //Zahl weg
+    gtk_range_set_round_digits(GTK_RANGE(ring3_s), 0);    
     gtk_widget_set_name(ring3_s, "ring3");
     gui.ring4_l=gtk_label_new("");
     ring4_s=gtk_scale_new_with_range(GTK_ORIENTATION_VERTICAL,0,12,1);
     //gtk_scale_set_value_pos(GTK_SCALE(ring4_s),GTK_POS_BOTTOM);                 //Zahl nach unten?
     gtk_scale_set_draw_value(GTK_SCALE(ring4_s), FALSE);                        //Zahl weg
+    gtk_range_set_round_digits(GTK_RANGE(ring4_s), 0);    
     gtk_range_set_value(GTK_RANGE(ring4_s), 12);
     gtk_widget_set_name(ring4_s, "ring4");
     gui.ring5_l=gtk_label_new("");
     ring5_s=gtk_scale_new_with_range(GTK_ORIENTATION_VERTICAL,0,12,1);
     //gtk_scale_set_value_pos(GTK_SCALE(ring5_s),GTK_POS_BOTTOM);                 //Zahl nach unten?
     gtk_scale_set_draw_value(GTK_SCALE(ring5_s), FALSE);                        //Zahl weg
+    gtk_range_set_round_digits(GTK_RANGE(ring5_s), 0);    
     gtk_range_set_value(GTK_RANGE(ring5_s), 10);
     gtk_widget_set_name(ring5_s, "ring5");
     gui.ring6_l=gtk_label_new("");
     ring6_s=gtk_scale_new_with_range(GTK_ORIENTATION_VERTICAL,0,12,1);
     //gtk_scale_set_value_pos(GTK_SCALE(ring6_s),GTK_POS_BOTTOM);                 //Zahl nach unten?
     gtk_scale_set_draw_value(GTK_SCALE(ring6_s), FALSE);                        //Zahl weg
+    gtk_range_set_round_digits(GTK_RANGE(ring6_s), 0);    
     gtk_range_set_value(GTK_RANGE(ring6_s), 12);
     gtk_widget_set_name(ring6_s, "ring6");
 
@@ -369,6 +385,8 @@ void berechnen (gui_t *pgui)
 		//ausgabe(worte, pruef);
         ausgabeInStr(worte, pruef, inStr, pgui->ringWerte);
         gtk_label_set_text(GTK_LABEL(pgui->output), inStr);
+
+        setzeRFarbe(pgui, pruef);
     }
 }
 
@@ -405,4 +423,26 @@ void initColors (gui_t *pgui)
     }
 
    
+}
+
+
+void setzeRFarbe (gui_t *pgui, int ringzahl)
+{
+    GdkColor *tmpColor;
+    if (ringzahl > 4)           //if "Metallschicht"
+    {
+        tmpColor = &pgui->bg_colors[2];    //hellblau
+        gtk_widget_modify_bg(GTK_WIDGET(pgui->t_frame), GTK_STATE_NORMAL, tmpColor);
+        gtk_widget_modify_bg(GTK_WIDGET(pgui->b_frame), GTK_STATE_NORMAL, tmpColor);
+        gtk_widget_modify_bg(GTK_WIDGET(pgui->l_frame), GTK_STATE_NORMAL, tmpColor);
+        gtk_widget_modify_bg(GTK_WIDGET(pgui->r_frame), GTK_STATE_NORMAL, tmpColor);
+    }
+    else
+    {
+        tmpColor = &pgui->bg_colors[1];    //beige
+        gtk_widget_modify_bg(GTK_WIDGET(pgui->t_frame), GTK_STATE_NORMAL, tmpColor);
+        gtk_widget_modify_bg(GTK_WIDGET(pgui->b_frame), GTK_STATE_NORMAL, tmpColor);
+        gtk_widget_modify_bg(GTK_WIDGET(pgui->l_frame), GTK_STATE_NORMAL, tmpColor);
+        gtk_widget_modify_bg(GTK_WIDGET(pgui->r_frame), GTK_STATE_NORMAL, tmpColor);
+    }
 }
