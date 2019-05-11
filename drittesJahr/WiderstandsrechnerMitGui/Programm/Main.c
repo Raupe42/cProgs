@@ -1,8 +1,11 @@
 /*
+author: Raupe
+
 Hauptprogramm des Widerstandsrechners mit GUI
 Bedienkozepte:
 - Kommandozeile der Gui funktioniert wie das Konsolenprogramm
-
+- Hilfetext auch für die Konsole
+- Ohne Parameter oder bei allen anderen: Start des Programms mit GUI
 
 */
 #include <string.h>
@@ -46,6 +49,6 @@ void printHelp ()
     strcat(hilfeText, "decodiert und den Wert angibt.\nNormal wird das Programm mit einer grafischen Anzeige");
     strcat(hilfeText, "\naufgerufen.\n\nKommandozeilenargumente :\n - ? oder - help\n Anzeigen der Hilfe");
     strcat(hilfeText, "(aber das ist anscheinend bekannt)\n - cmd\n Aufruf als Konsolenprogramm\n");
-    strcat(hilfeText, "(Bekannt aus der Vollversion des C7 .3 Rechners der\n Autoren dieses Programms)\n ");
+    strcat(hilfeText, "(Bekannt aus der Vollversion des C7.3 Rechners der\n Autoren dieses Programms)\n ");
     printf("%s", hilfeText);
     }

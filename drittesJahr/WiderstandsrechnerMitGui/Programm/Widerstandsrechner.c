@@ -501,6 +501,17 @@ int ausgabe(char worte[][WORTLEN], int pruefung)
 	return 0;
 }
 
+
+/*
+Diese Funktion verwaltet und erzeugt die Ausgabe zum einen als
+Konsolenzeilen aber auch als return-Wert in den (char *)retStr
+der als Parameter mit uebergeben wird
+
+Neue Funktionen gegenueber der Vollversion:
+-erkennen UND Melden von fehlerhaften Kombinationen fuer TK
+-speichern der ermittelten Ringe als Zahlen in das int ringe []
+
+*/
 int ausgabeInStr(char worte[][WORTLEN], int pruefung, char *retStr, int ringe[])
 {
 	char ret[MAXOUT] = "", buff[MAXOUT];

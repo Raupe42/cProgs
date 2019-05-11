@@ -1,43 +1,60 @@
+/*
+author: Jens, Tim
+
+Quellcode zur Erstellung und Auswertung der 
+grafischen Oberflaeche durch GTK.
+Das UI basiert auf einem Layout mit v- und h-Boxen
+Daher ist eine vollstaendige Skalierbarkeit gegeben
+
+Grundanforderung:
+Einstellen eines Widerstandsfarbcodes und erhalten des Wertes
+Funktion:
+- Enstellen des Wertes durch cb_slider
+    Damit ist ein Einstellen mit Maus und auch Tab + Pfeiltasten moeglich
+    alternativ auch scrollen
+- Bei Event cahnged der Slider betrforrenen Slider Auswerten
+- Die Auswertung der Slider erzeugt einen String im der Terminal-Zeile
+- Der String wird an die bekannte Software "Widerstandsrechner Vollversion"
+    der gleichen Autoren uebergeben
+- Die Ausgabe erfolgt in Form von Strings die in diesem Programmteil
+    zur Anzeige gebracht werden
+- Das Programm soll sicher vor fataler Fehlbedienung sein
+- Offensichtliche Fehler werden analysiert und gemeldet
+- Wird eine Luecke zwischen Ringen gelassen, so wird die Funktion nicht beeintraechtigt
+- 
+*/
+
 #include <gtk/gtk.h>
 #include <string.h>
 
 #include "gui.h"
 
+//lokale Prototypen
 void fuelleTerminal(gui_t *pgui);
 void berechnen(gui_t *pgui);
+void initColors(gui_t *pgui);
+void setzeRFarbe(gui_t *pgui, int ringzahl);
+void reloadColoredLabels(gui_t *pgui);
+//ENDE lokale Prototypen
 
-void slider(GtkWidget *scale, gpointer daten)
+/*
+Callback-Funktion
+Der Wert eines Sliders hat sich geändert
+Dieser wird ausgewertet und das betreffende Feld aktualisiert
+*/
+void cb_slider(GtkWidget *scale, gpointer daten)
 {
     GdkColor temp;
-    //Farbzuweisung
-    /*
-    GdkColor black, brown, red, orange, yellow, green, blue, violet, grey, white, gold, silver, none, temp;
-    GdkColor *colors[] = {&black, &brown, &red, &orange, &yellow, &green, &blue, &violet, &grey, &white, &gold, &silver, &none};
-    gdk_color_parse("#000000", &black);
-    gdk_color_parse("#8B4513", &brown);
-    gdk_color_parse("#FF0000", &red);
-    gdk_color_parse("#FFA500", &orange);
-    gdk_color_parse("#FFFF00", &yellow);
-    gdk_color_parse("#00FF00", &green);
-    gdk_color_parse("#0000FF", &blue);
-    gdk_color_parse("#8A2BE2", &violet);
-    gdk_color_parse("#BEBEBE", &grey);
-    gdk_color_parse("#FFFFFF", &white);
-    gdk_color_parse("#D4AF37", &gold);
-    gdk_color_parse("#C0C0C0", &silver);
-    gdk_color_parse("#F0F0F0", &none);              //so etwa normal?
-    */
-
     gui_t *pgui;
     int wert;
     pgui=daten;
     const char *p=gtk_widget_get_name(scale);
     wert=gtk_range_get_value(GTK_RANGE(scale));
-    g_print("Neuer Wert: %i \n", wert);             //Debug
-    g_print("%s \n", p);                            //Debug
+    //g_print("Neuer Wert: %i \n", wert);             //Debug
+    //g_print("%s \n", p);                            //Debug
 
-    //temp = *colors[wert];
     temp = pgui->colors[wert];
+
     if(strcmp(p, "ring1")==0)
         gtk_widget_modify_bg(GTK_WIDGET(pgui->ring1_l), GTK_STATE_NORMAL, &temp);
     if(strcmp(p, "ring2")==0)
@@ -48,14 +65,21 @@ void slider(GtkWidget *scale, gpointer daten)
         gtk_widget_modify_bg(GTK_WIDGET(pgui->ring4_l), GTK_STATE_NORMAL, &temp);
     if(strcmp(p, "ring5")==0)
         gtk_widget_modify_bg(GTK_WIDGET(pgui->ring5_l), GTK_STATE_NORMAL, &temp);
-    if(strcmp(p, "ring6")==0)                                                           //NEU
-        gtk_widget_modify_bg(GTK_WIDGET(pgui->ring6_l), GTK_STATE_NORMAL, &temp);       //NEU
-
+    if(strcmp(p, "ring6")==0)                                                           
+        gtk_widget_modify_bg(GTK_WIDGET(pgui->ring6_l), GTK_STATE_NORMAL, &temp);       
+   
     fuelleTerminal(pgui);
     berechnen(pgui);
+    reloadColoredLabels(pgui);
+    return;
 }
 
-void terminal(GtkWidget *entry, gui_t *pgui)
+/*
+Callback-Funktion
+Die EIngabe beim Terminal bestaetigt
+Diese wird nun ausgewertet 
+*/
+void cb_terminal(GtkWidget *entry, gui_t *pgui)
 {
     const char *p;
     char buffer[MAXINPUT];
@@ -66,7 +90,7 @@ void terminal(GtkWidget *entry, gui_t *pgui)
     berechnen(pgui);
     
     gtk_entry_set_text(GTK_ENTRY(entry), buffer);
-
+    
     gtk_widget_modify_bg (pgui->ring1_l, GTK_STATE_NORMAL, &pgui->colors[ pgui->ringWerte[0]]);
     gtk_widget_modify_bg (pgui->ring2_l, GTK_STATE_NORMAL, &pgui->colors[ pgui->ringWerte[1]]);
     gtk_widget_modify_bg (pgui->ring3_l, GTK_STATE_NORMAL, &pgui->colors[ pgui->ringWerte[2]]);
@@ -74,10 +98,12 @@ void terminal(GtkWidget *entry, gui_t *pgui)
     gtk_widget_modify_bg (pgui->ring5_l, GTK_STATE_NORMAL, &pgui->colors[ pgui->ringWerte[4]]);
     gtk_widget_modify_bg (pgui->ring6_l, GTK_STATE_NORMAL, &pgui->colors[ pgui->ringWerte[5]]);
    
+
     printf("\n-%i-\n", pgui->ringWerte[5]);
+    return;
 }
 
-void help(GtkWidget *button, gpointer muell)
+void help_click(GtkWidget *button, gpointer muell)
 {
     GtkWidget* help_window;
     GtkWidget* label;
@@ -90,11 +116,12 @@ void help(GtkWidget *button, gpointer muell)
 
     strcat (buff, "<big>Widerstandsrechner V2.0\nDie Farben des Widerstandes an den Schiebereglern einstellen.\n");
     strcat (buff, "Das Ergebnis wird in unterschalb der Schieberegler angezeigt.\n");
+    strcat (buff, "Die Farben werden in Aufsteigender Reihfolge ausgewählt.\n\"Kein Ring\" ist am unteren Ende des Schiebers zu finden\n");
     strcat (buff, "\nAlternativ kann das Programm auch über die Konsole bedient werden.\n");
     strcat (buff, "Das Terminal wird wie die Grundversion (Konsolenanwendung) bedient.\n");
     strcat (buff, "In die Terminal-Zeile die Farben (kürzel) eingeben und mit Enter akzeptieren.\n");
     strcat (buff, "Es gelten weiterhin die deutschen und englischen Kurzzeichen der Farben.\n");
-    strcat (buff, "\n Special: Aufrufparameter \n-? oder -help : Anzeige der Hilfe\n");
+    strcat (buff, "\n Special: Aufrufparameter \n-? oder -help_click : Anzeige der Hilfe\n");
     strcat(buff, "-cmd : Aufrufen des Originalprogramms \"Widerstandsrechner\"\n");
     strcat (buff, "</big>");
 
@@ -104,6 +131,7 @@ void help(GtkWidget *button, gpointer muell)
     gtk_label_set_use_markup (GTK_LABEL(label), TRUE);
     gtk_container_add(GTK_CONTAINER(help_window), label);
     gtk_widget_show_all(help_window);
+    return;
 }
 
 void fuelleTerminal (gui_t* pgui)
@@ -114,23 +142,20 @@ void fuelleTerminal (gui_t* pgui)
     char str[80] = "";
     char colorStr[13][5] = {"bk", "bn", "rd", "or", "ye", "gn", "bl", "vio", "gy", "wh", "au", "ag", ""};
    
-    
-     for (i = 0; i < 6; i++)
+    //Auswerten der Slider und erstellen des Terminal-Textes
+    for (i = 0; i < 6; i++)
     {
          wert = gtk_range_get_value(GTK_RANGE(pgui->scales[i]));
          i_wert = wert;
          if (i < 5)
             next_wert = gtk_range_get_value(GTK_RANGE(pgui->scales[i+1]));
-        // if (wert < 13)
         if (i == 0 && i_wert == 12)
-        {
             i_wert = 11;
-        }
         if (strcmp ("", colorStr [i_wert]))
             strcat(str, colorStr [i_wert]);
         if (i < 5)
         {
-            //printf ("%i", next_wert);
+ 
             if (strcmp ("", colorStr [next_wert]))
             {
                 strcat(str, "-");
@@ -140,8 +165,6 @@ void fuelleTerminal (gui_t* pgui)
     }
     
     gtk_entry_set_text(GTK_ENTRY(pgui->terminal), str);
-
-    
     return; 
 }
 
@@ -155,7 +178,7 @@ int main_gui(int argc, char* argv[])
     GtkWidget *ring3_s;
     GtkWidget *ring4_s;
     GtkWidget *ring5_s;
-    GtkWidget *ring6_s;             //NEU
+    GtkWidget *ring6_s;             
     GtkWidget *heading;
     GtkWidget *entry;
     GtkWidget *b_help;
@@ -170,22 +193,16 @@ int main_gui(int argc, char* argv[])
     GtkWidget *empty4;
     GtkWidget *leg1;
     GtkWidget *leg2;
-    GtkWidget *v_frame;         //NEU
-    GtkWidget *h_scale;         //NEU
+    GtkWidget *v_frame;         
+    GtkWidget *h_scale;         
 
-    /*
-    GdkColor black, beige, lBlue;                  //NEU angepasst
-    gdk_color_parse("#000000", &black);
-    gdk_color_parse("#E1C699", &beige);             //NEU
-    gdk_color_parse("#00BFFF", &lBlue);            //NEU
-*/
     GdkColor *tmpColor;
     gtk_init(&argc, &argv);
     initColors(&gui);
 
     fenster=gtk_window_new(GTK_WINDOW_TOPLEVEL);
     v_box=gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
-    h_box=gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);               //NEU angepasst
+    h_box=gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);               
     heading=gtk_label_new("<big>Widerstandsrechner</big>");
     gtk_label_set_use_markup(GTK_LABEL(heading),TRUE);
 
@@ -200,10 +217,8 @@ int main_gui(int argc, char* argv[])
 
     gtk_widget_modify_bg(GTK_WIDGET(leg1), GTK_STATE_NORMAL, &gui.bg_colors[0]);
     gtk_widget_modify_bg(GTK_WIDGET(leg2), GTK_STATE_NORMAL, &gui.bg_colors[0]);
-    gtk_widget_set_size_request(leg1, 40, 5);                                   //NEU angepasst
-    gtk_widget_set_size_request(leg2, 40, 5);                                   //NEU angepasst
-
-    //NEU
+    gtk_widget_set_size_request(leg1, 40, 5);                                   
+    gtk_widget_set_size_request(leg2, 40, 5);                                   
 
     v_frame=gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     gui.t_frame=gtk_label_new("");
@@ -211,30 +226,12 @@ int main_gui(int argc, char* argv[])
     gui.l_frame=gtk_label_new("");
     gui.r_frame=gtk_label_new("");
 
-    if (FALSE)           //if "Metallschicht"
-    {
-        tmpColor = &gui.bg_colors[2];    //hellblau
-        gtk_widget_modify_bg(GTK_WIDGET(gui.t_frame), GTK_STATE_NORMAL, tmpColor);
-        gtk_widget_modify_bg(GTK_WIDGET(gui.b_frame), GTK_STATE_NORMAL, tmpColor);
-        gtk_widget_modify_bg(GTK_WIDGET(gui.l_frame), GTK_STATE_NORMAL, tmpColor);
-        gtk_widget_modify_bg(GTK_WIDGET(gui.r_frame), GTK_STATE_NORMAL, tmpColor);
-    }
-    else
-    {
-        tmpColor = &gui.bg_colors[1];    //beige
-        gtk_widget_modify_bg(GTK_WIDGET(gui.t_frame), GTK_STATE_NORMAL, tmpColor);
-        gtk_widget_modify_bg(GTK_WIDGET(gui.b_frame), GTK_STATE_NORMAL, tmpColor);
-        gtk_widget_modify_bg(GTK_WIDGET(gui.l_frame), GTK_STATE_NORMAL, tmpColor);
-        gtk_widget_modify_bg(GTK_WIDGET(gui.r_frame), GTK_STATE_NORMAL, tmpColor);
-    }
-    
     gtk_widget_set_size_request(gui.t_frame, -1, 5);
     gtk_widget_set_size_request(gui.b_frame, -1, 5);
     gtk_widget_set_size_request(gui.l_frame, 20, -1);
     gtk_widget_set_size_request(gui.r_frame, 20, -1);
-
-    ///NEU_END
-    h_scale=gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);                         //NEU
+ 
+    h_scale=gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);                        
     gui.ring1_l=gtk_label_new("");
     ring1_s=gtk_scale_new_with_range(GTK_ORIENTATION_VERTICAL,0,12,1);
     gtk_range_set_value(GTK_RANGE(ring1_s), 1);
@@ -281,9 +278,8 @@ int main_gui(int argc, char* argv[])
     gui.scales[2] = ring3_s;
     gui.scales[3] = ring4_s;
     gui.scales[4] = ring5_s;
-    gui.scales[5] = ring6_s;                //NEU
-
-    
+    gui.scales[5] = ring6_s;                
+   
     gui.output = gtk_label_new("Ausgabe:");
 
     entry=gtk_entry_new();
@@ -301,12 +297,10 @@ int main_gui(int argc, char* argv[])
     gtk_box_pack_start(GTK_BOX(v_box), heading, FALSE, FALSE, 2);
     gtk_box_pack_start(GTK_BOX(v_box), h_box, TRUE, TRUE, 2);
 
-    gtk_box_pack_start(GTK_BOX(h_box), v_leg1, FALSE, FALSE, 0);            //NEU angepasst
+    gtk_box_pack_start(GTK_BOX(h_box), v_leg1, FALSE, FALSE, 0);            
     gtk_box_pack_start(GTK_BOX(v_leg1), empty1, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(v_leg1), leg1, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(v_leg1), empty2, TRUE, TRUE, 0);
-
-    //NEU
 
     gtk_box_pack_start(GTK_BOX(h_box), v_frame,TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(v_frame), gui.t_frame,FALSE, FALSE, 0);
@@ -328,9 +322,8 @@ int main_gui(int argc, char* argv[])
     gtk_box_pack_start(GTK_BOX(h_scale), gui.r_frame,FALSE, FALSE, 0);
 
     gtk_box_pack_start(GTK_BOX(v_frame), gui.b_frame,FALSE, FALSE, 0);
-    //NEU END
-
-    gtk_box_pack_start(GTK_BOX(h_box), v_leg2, FALSE, FALSE, 0);           //NEU angepasst
+  
+    gtk_box_pack_start(GTK_BOX(h_box), v_leg2, FALSE, FALSE, 0);          
     gtk_box_pack_start(GTK_BOX(v_leg2), empty3, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(v_leg2), leg2, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(v_leg2), empty4, TRUE, TRUE, 0);
@@ -340,34 +333,33 @@ int main_gui(int argc, char* argv[])
     gtk_box_pack_start(GTK_BOX(h_box2), entry, TRUE, TRUE, 2);
     gtk_box_pack_start(GTK_BOX(h_box2), b_help, FALSE, FALSE, 2);
 
-    g_signal_connect(G_OBJECT(ring1_s), "value_changed", G_CALLBACK(slider), &gui);
-    g_signal_connect(G_OBJECT(ring2_s), "value_changed", G_CALLBACK(slider), &gui);
-    g_signal_connect(G_OBJECT(ring3_s), "value_changed", G_CALLBACK(slider), &gui);
-    g_signal_connect(G_OBJECT(ring4_s), "value_changed", G_CALLBACK(slider), &gui);
-    g_signal_connect(G_OBJECT(ring5_s), "value_changed", G_CALLBACK(slider), &gui);
-    g_signal_connect(G_OBJECT(ring6_s), "value_changed", G_CALLBACK(slider), &gui);     //NEU
-    g_signal_connect(G_OBJECT(entry), "activate", G_CALLBACK(terminal), &gui);          //ENTER-Taste zum "aktivieren"
-    g_signal_connect(G_OBJECT(b_help), "clicked", G_CALLBACK(help), NULL);
+    g_signal_connect(G_OBJECT(ring1_s), "value_changed", G_CALLBACK(cb_slider), &gui);
+    g_signal_connect(G_OBJECT(ring2_s), "value_changed", G_CALLBACK(cb_slider), &gui);
+    g_signal_connect(G_OBJECT(ring3_s), "value_changed", G_CALLBACK(cb_slider), &gui);
+    g_signal_connect(G_OBJECT(ring4_s), "value_changed", G_CALLBACK(cb_slider), &gui);
+    g_signal_connect(G_OBJECT(ring5_s), "value_changed", G_CALLBACK(cb_slider), &gui);
+    g_signal_connect(G_OBJECT(ring6_s), "value_changed", G_CALLBACK(cb_slider), &gui);    
+    g_signal_connect(G_OBJECT(entry), "activate", G_CALLBACK(cb_terminal), &gui);          //ENTER-Taste zum "aktivieren"
+    g_signal_connect(G_OBJECT(b_help), "clicked", G_CALLBACK(help_click), NULL);
     g_signal_connect(G_OBJECT(fenster), "delete-event", gtk_main_quit, NULL);
     
     
     gtk_widget_show_all(fenster);
 
-    for (i = 0; i < 6; i++)                 //NEU angepasst
+    for (i = 0; i < 6; i++)                
     {
-        slider(gui.scales[i], &gui);
+        cb_slider(gui.scales[i], &gui);
     }
 
 
     gtk_main();
+    return 42;  //was sonst
 }
 
 
-
-
-
-
-
+/*
+String aus dem Terminal lesen und auswerten sowie ausgeben
+*/
 void berechnen (gui_t *pgui)
 {
     char inStr[MAXINPUT + MAXOUT];
@@ -382,14 +374,17 @@ void berechnen (gui_t *pgui)
 		{
 			aufteilen(inStr, worte, pruef);
 		}
-		//ausgabe(worte, pruef);
+	
         ausgabeInStr(worte, pruef, inStr, pgui->ringWerte);
         gtk_label_set_text(GTK_LABEL(pgui->output), inStr);
 
         setzeRFarbe(pgui, pruef);
     }
+    return;
 }
 
+
+//Farben definieren und in das gui_t schreiben
 void initColors (gui_t *pgui)
 {
     int i;
@@ -408,10 +403,10 @@ void initColors (gui_t *pgui)
     gdk_color_parse("#FFFFFF", &white);
     gdk_color_parse("#D4AF37", &gold);
     gdk_color_parse("#C0C0C0", &silver);
-    gdk_color_parse("#F0F0F0", &none);              //so etwa normal?
+    gdk_color_parse("#F0F0F0", &none);              //so etwa normal-Farbe?
     
-    gdk_color_parse("#E1C699", &beige);             //NEU
-    gdk_color_parse("#00BFFF", &lBlue);            //NEU
+    gdk_color_parse("#E1C699", &beige);             
+    gdk_color_parse("#00BFFF", &lBlue);           
 
     for (i = 0; i < 13; i++)
     {
@@ -421,11 +416,10 @@ void initColors (gui_t *pgui)
     {
         pgui->bg_colors[i] = *local_colors[i + 13];
     }
-
-   
+    return;
 }
 
-
+//Festlegen der Hintergrundfarbe des Widerstandes
 void setzeRFarbe (gui_t *pgui, int ringzahl)
 {
     GdkColor *tmpColor;
@@ -436,6 +430,7 @@ void setzeRFarbe (gui_t *pgui, int ringzahl)
         gtk_widget_modify_bg(GTK_WIDGET(pgui->b_frame), GTK_STATE_NORMAL, tmpColor);
         gtk_widget_modify_bg(GTK_WIDGET(pgui->l_frame), GTK_STATE_NORMAL, tmpColor);
         gtk_widget_modify_bg(GTK_WIDGET(pgui->r_frame), GTK_STATE_NORMAL, tmpColor);
+        
     }
     else
     {
@@ -445,4 +440,16 @@ void setzeRFarbe (gui_t *pgui, int ringzahl)
         gtk_widget_modify_bg(GTK_WIDGET(pgui->l_frame), GTK_STATE_NORMAL, tmpColor);
         gtk_widget_modify_bg(GTK_WIDGET(pgui->r_frame), GTK_STATE_NORMAL, tmpColor);
     }
+    pgui->colors[12] = *tmpColor;
+    return;
+}
+
+void reloadColoredLabels (gui_t *pgui)
+{
+    gtk_widget_modify_bg (pgui->ring1_l, GTK_STATE_NORMAL, &pgui->colors[(int)gtk_range_get_value(GTK_RANGE(pgui->scales[0]))]);
+    gtk_widget_modify_bg (pgui->ring2_l, GTK_STATE_NORMAL, &pgui->colors[(int)gtk_range_get_value(GTK_RANGE(pgui->scales[1]))]);
+    gtk_widget_modify_bg (pgui->ring3_l, GTK_STATE_NORMAL, &pgui->colors[(int)gtk_range_get_value(GTK_RANGE(pgui->scales[2]))]);
+    gtk_widget_modify_bg (pgui->ring4_l, GTK_STATE_NORMAL, &pgui->colors[(int)gtk_range_get_value(GTK_RANGE(pgui->scales[3]))]);
+    gtk_widget_modify_bg (pgui->ring5_l, GTK_STATE_NORMAL, &pgui->colors[(int)gtk_range_get_value(GTK_RANGE(pgui->scales[4]))]);
+    gtk_widget_modify_bg (pgui->ring6_l, GTK_STATE_NORMAL, &pgui->colors[(int)gtk_range_get_value(GTK_RANGE(pgui->scales[5]))]);
 }

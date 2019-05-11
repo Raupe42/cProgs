@@ -1,10 +1,20 @@
+/*
+author: Raupe
+
+Headerdatei des Widerstandsrechners
+
+Basierend auf der der Vollversion des Widerstandsrechners aus C7.3
+Bietet die Funktionen des Programms sowie einige defines 
+die zur weietren Anpassung genutzt werden koennen
+*/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 #include <locale.h>
 
-
+//Daten die nanpassbar sein sollen
 #define MAXINPUT 99
 #define MAXOUT 200
 #define WORTLEN 30
