@@ -13,10 +13,11 @@ typedef struct datum_str
         bool isSchaltjahr = false;
         if (jahr % 4 == 0)
         {
+            isSchaltjahr = true;
             if (jahr %100 != 0)
             {
-                if (jahr % 400 == 0)
-                isSchaltjahr = true;
+                if (jahr % 400 != 0)
+                isSchaltjahr = false;
             }
         }
         return isSchaltjahr;

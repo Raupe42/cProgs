@@ -1,15 +1,9 @@
 Widerstandsrechner V2.0
-Tim Kirchner und Jens Höcker
+Tim Kirchner und Jens Hï¿½cker
 
 Anbei die Software mit vorcompilierten Dateien (Windows .exe und Unix ohne Endung)
 
-Für Hilfe aufruf des Programms über Konsole mit -? oder -help
-
-Bei Fragen oder Problemen zu Arbeitszeiten:
-052418974577
-
-und immer über
-jens_hoecker@t-online.de
+Fï¿½r Hilfe aufruf des Programms ï¿½ber Konsole mit -? oder -help
 
 
 _________________________________________________________________________________________
