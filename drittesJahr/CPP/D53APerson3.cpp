@@ -21,6 +21,18 @@ private:
     int gebDatum; //JJJJMMTT
     
 public:
+    person_class (const char vorn [41], const char nachn [41], int gebDat = 17000000)
+    {
+        strcpy (vorname, vorn);
+        strcpy (nachname, nachn);
+        gebDatum = gebDat;
+    }
+    person_class ()
+    {
+      strcpy (vorname, "De");
+        strcpy (nachname, "fault");
+        gebDatum = 101010;  //basis 2   
+    }
     void init (const char vorn [41], const char nachn [41], const int gebDat)
     {
         strcpy (vorname, vorn);
@@ -54,6 +66,10 @@ int main()
 
 {
     person_class pers1;
+
+    person_class a;
+    person_class b ("Paul", "Meier");
+    person_class c ("Paul", "Meier", 19901003);
    // strcpy(pers1.vorname, "Vorname");
    // strcpy(pers1.nachname, "Nachname");
    pers1.init ("Vorname", "Nachname", 20000101);
