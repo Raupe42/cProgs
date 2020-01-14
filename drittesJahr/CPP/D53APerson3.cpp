@@ -56,7 +56,7 @@ public:
     }
     void print2()
     {
-        printf("%s %s\n", nachname, vorname);
+        printf("%s %s %i\n", nachname, vorname, gebDatum);
     }
 
     
@@ -65,6 +65,7 @@ public:
 int main()
 
 {
+    person_class *personenZeiger; 
     person_class pers1;
 
     person_class a;
@@ -79,4 +80,16 @@ int main()
       pers1.init ();
     pers1.print1();
     pers1.print2();
+
+    personenZeiger = &a;
+    personenZeiger->print1();
+   personenZeiger->print2();
+
+    personenZeiger = &b;
+    personenZeiger->print1();
+   personenZeiger->print2();
+
+   personenZeiger = &c;
+    personenZeiger->print1();
+   personenZeiger->print2();
 }
