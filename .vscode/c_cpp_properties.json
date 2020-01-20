@@ -54,6 +54,20 @@
             "intelliSenseMode": "msvc-x64",
             "cStandard": "c11",
             "cppStandard": "c++17"
+        },
+        {
+            "name": "WinConfig",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "intelliSenseMode": "msvc-x64",
+            "cStandard": "c11",
+            "cppStandard": "c++20"
         }
     ],
     "version": 4
