@@ -76,6 +76,7 @@ int main(void)
                     //printf ("ausgabe %i\n", felder[i]);
                     p = str_holen2(zk, felder[j]-1);
                     printf("%s:", p);
+                    free (p);
                 }
             }
             putchar ('\n');

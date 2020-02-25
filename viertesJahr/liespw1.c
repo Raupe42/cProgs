@@ -38,7 +38,7 @@ char *str_holen2(char *s, int n)
             pStr = strchr(pStr + 1, ':');
         pStr++;
     }
-    
+    //Abstand bestimmen
     i = 0;
     while (*(pStr + i) != ':' && *(pStr + i) != '\0')
         i++;    //printf("%c != %c\n", *(pStr + i), '0');
@@ -58,6 +58,7 @@ int main(void)
         printf ("Stelle:");
         scanf ("%i", &n);
         p = str_holen2(zk, n);
+        free (p);
         printf("\n%s\n", p);
     }
 }
