@@ -43,7 +43,7 @@ short int eineFrageStellen (short int eintrNr, t_fragefeld fragefeld )
     char antw [81];
     short int falsch = 1;
     //zu einem Eintrag Frage stellen
-    printf ("%s\n", fragefeld [eintrNr] [0]);
+    printf ("Frage%i: %s\n", eintrNr, fragefeld [eintrNr] [0]);
 
     //Antwort einlesen
     scanf ("%s", antw);
@@ -67,7 +67,7 @@ int main (void)
     int i;
     char fragefeld [MAX_ANZAHL] [2] [81];
     //anzahl = feld_laden (fragefeld);
-    feld_laden_aus_datei ("Fragen.txt", fragefeld);
+    anzahl = feld_laden_aus_datei ("Fragen.txt", fragefeld);
     srand (time(NULL));
         eineFrageStellen (rand()%anzahl, fragefeld);
     return 0;
@@ -80,21 +80,27 @@ short int feld_laden_aus_datei (char dateiname [80], t_fragefeld feld)
 {   
     FILE *file;
     char buff  [81];
-    int i = 0, j = 0;
+    int i = 0, j = 0, len;
     //Textdatei öffnen
     file = fopen (dateiname, "r");
     if (!file)
         return -1;
     //Fragezeile dann Antwortezeile laden
-    while (fgets (buff, 81, file) != NULL && i < 200)
+    while (fscanf (file, "%s ", buff) != EOF && i < 200)
     {
         
             strcpy (feld [i] [j], buff);
+            len = strlen (buff);
+            //buff [len -1] = '\n';
+            printf ("Schreibe %s in Feld [%i] [%i] (%i)\n", buff, i, j, len);
             if(j)
+            {
                 j = 0;
+                i +=1;
+            }
             else
                 j = 1;
-            i++;
+           
     }
     fclose (file);
     //Fehler ggf melden
