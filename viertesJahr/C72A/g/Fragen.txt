@@ -1,0 +1,10 @@
+#p1.C
+Droelf
+Welcher Buchstabe kommt nach A?
+B
+Welcher Buchstabe kommt nach B?
+C
+Welcher Buchstabe kommt nach C?
+D
+Welcher Buchstabe kommt nach D?
+E
