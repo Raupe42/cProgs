@@ -86,13 +86,11 @@ short int feld_laden_aus_datei (char dateiname [80], t_fragefeld feld)
     if (!file)
         return -1;
     //Fragezeile dann Antwortezeile laden
-    while (fscanf (file, "%s ", buff) != EOF && i < 200)
+    while (fgets (buff, 80, file) != NULL && i < 200)
     {
-        
+            strtok (buff, "\n");
             strcpy (feld [i] [j], buff);
-            len = strlen (buff);
-            //buff [len -1] = '\n';
-            printf ("Schreibe %s in Feld [%i] [%i] (%i)\n", buff, i, j, len);
+            //printf ("Schreibe %s in Feld [%i] [%i] (%i)\n", buff, i, j, len);
             if(j)
             {
                 j = 0;
