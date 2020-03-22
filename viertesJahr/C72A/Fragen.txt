@@ -8,3 +8,5 @@ Welcher Buchstabe kommt nach C?
 D
 Welcher Buchstabe kommt nach D?
 E
+Welche zwei Zahlen kommen nach 0?
+1 2
