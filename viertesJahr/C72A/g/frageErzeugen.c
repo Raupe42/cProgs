@@ -61,7 +61,13 @@ short eineFrageErzeugen (char *target, char *frage, char *antwort)
         strcat (command, " -o extraProg.");
         strcat (command, PFIX);
         system (command);
-        strcpy (command, "./extraProg.");
+        strcpy (command, "");
+        #ifdef UNIX
+            strcat (command, "./");
+        #elif unix
+            strcat (command, "./");
+        #endif
+        strcat (command, "extraProg.");
         strcat (command, PFIX);
         output = POPEN (command, "r");
         fgets (frage, 80, output);
