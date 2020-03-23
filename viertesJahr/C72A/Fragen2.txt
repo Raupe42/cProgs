@@ -1,0 +1,16 @@
+#p1.C
+Droelf
+#p2.C
+Zwuenf
+Welcher Buchstabe kommt nach A?
+B
+Welcher Buchstabe kommt nach B?
+C
+Welcher Buchstabe kommt nach C?
+D
+Welcher Buchstabe kommt nach D?
+E
+Autokennzeichen von Bielefeld?
+BI
+Komplimetaerfarbe zu Gruen?
+Rot

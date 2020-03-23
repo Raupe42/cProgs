@@ -35,6 +35,24 @@ typedef char t_fragefeld [] [2] [81];
 //FUER f
 short int feld_laden_aus_datei (char dateiname [80], t_fragefeld feld);
 //END_FUER f
+
+short eineFrageErzeugen (char *target, char *frage, char *antwort)
+{
+    char command [80];
+    FILE *output;
+        strcpy (command, "gcc ");
+        strcat (command, strtok (target, "\n"));
+        strcat (command, " -o extraProg.exe");
+        system (command);
+        output = _popen ("extraProg.exe", "r");
+        fgets (frage, 80, output);
+        frage [strlen (frage) - 1] = '\0';
+        fgets (antwort, 80, output);
+        strtok (antwort, "\n");
+        _pclose (output);
+    return 0;
+}
+
 /*
     Returns: 1 richtig, 0 FALSCH
 */
@@ -42,27 +60,11 @@ short int eineFrageStellen (short int eintrNr, t_fragefeld fragefeld )  //ANPASS
 {
     char antw [81];
     short int falsch = 1;
-    char command [80], *pSTr, msg [100];
-    FILE *output;
+    char msg [100];
+
     //prüfen ob die Frage erst noch generiert werden muss
     if (fragefeld [eintrNr] [0] [0] == '#')
-    {
-        //printf ("strat\n");
-        pSTr = strtok (fragefeld [eintrNr] [0], "#");
-        strcpy (command, "gcc ");
-        strcat (command, strtok (pSTr, "\n"));
-        strcat (command, " -o extraProg.exe");
-        system (command);
-        //system ("extraProg.exe");   //.\extraProg.exe > test.txt
-        output = _popen ("extraProg.exe", "r");
-        fgets (fragefeld [eintrNr] [0], 80, output);
-        //strtok (fragefeld [eintrNr] [0], "\n");
-        fragefeld [eintrNr] [0] [strlen (fragefeld [eintrNr] [0]) - 1] = '\0';
-        fgets (fragefeld [eintrNr] [1], 80, output);
-        strtok (fragefeld [eintrNr] [1], "\n");
-        _pclose (output);
-    }
-
+        eineFrageErzeugen (strtok (fragefeld [eintrNr] [0], "#"), fragefeld [eintrNr] [0], fragefeld [eintrNr] [1]);
 
     //zu einem Eintrag Frage stellen
     printf ("Frage%i: %s\n", eintrNr, fragefeld [eintrNr] [0]);
@@ -80,6 +82,8 @@ short int eineFrageStellen (short int eintrNr, t_fragefeld fragefeld )  //ANPASS
     return !falsch;
 
 }
+
+
 
 //END_aus c
 

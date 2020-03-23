@@ -1,7 +1,7 @@
 /*
 Pruefungstrainer
 
-Dies ist die gesamte AUfgabe als ein Programm.
+Dies ist die gesamte Aufgabe als ein Programm.
 Zum compilieren lediglich diese Datei mit gcc aufrufen.
 
 
@@ -12,29 +12,49 @@ Zum compilieren lediglich diese Datei mit gcc aufrufen.
 #include <time.h>
 #include <string.h>
 
+#ifdef UNIX
+#define CLS "clear"
+#elif unix
+#define CLS "clear"
+#else
+#define CLS "cls"
+#endif
+
 #define MAX_ANZAHL 200
+#define RICHTIGE_ANTWORT "Richtige Antwort"
+#define FALSCHE_ANTWORT "Nicht ganz Richtig"    //<Text>: Loesung
+#define DATEINAME "Fragen2.txt"  //zur Eingabe des Dateinamens zur Laufzeit: Zeile auskommentieren
 
 typedef char t_fragefeld[][2][81];
+typedef struct statistik_struct {
+    int anzahlGestellt;
+    int anzahlRichtig;
+} t_statistik;
 
 //Prototypen
 unsigned short int feld_laden(char fragefeld[][2][81]);
 short int eineFrageStellen(short int eintrNr, t_fragefeld fragefeld);
 short int feld_laden_aus_datei(char dateiname[80], t_fragefeld feld);
+short debugMenu(t_fragefeld fragefeld, short *p_anzahl);
+short eineFrageErzeugen (char *target, char *frage, char *antwort);
 
 void clearScreen();
 //END_Prototypen
 
 int main(void)
 {
-    short int anzahl = 0;
+    short int anzahl = 0, antwortRichtig;
     int i, input = -1;
-    char fragefeld[MAX_ANZAHL][2][81], dateiname[100] = "Fragen.txt";
+    char fragefeld[MAX_ANZAHL][2][81], dateiname[100] = DATEINAME;
     FILE *file;
+    t_statistik statistik;
     while (input)
     {
         clearScreen();
         printf("Pruefungstrainer:\n0 Ende\n1 Quiz komplett\n2 Quiz random\n3 Datei laden\n9 Sonder\n");
-        printf("Es sind %i Fragen geladen\n", anzahl);
+        printf("--Es sind %i Fragen geladen--\n", anzahl);
+         if (statistik.anzahlGestellt)
+                printf ("Bisher wurden %2.1lf%% der Fragen richtig beantwortet.\n", 100.0 * statistik.anzahlRichtig / statistik.anzahlGestellt);
         scanf("%i", &input);
         while (getchar() != '\n')
         {
@@ -43,52 +63,78 @@ int main(void)
         {
         case 1:
             for (i = 0; i < anzahl; i++)
-                eineFrageStellen(i, fragefeld);
+                antwortRichtig = eineFrageStellen(i, fragefeld);
+                statistik.anzahlGestellt ++;
+                if (antwortRichtig)
+                    statistik.anzahlRichtig ++;
             break;
         case 2:
             srand(time(NULL));
-            eineFrageStellen(rand() % anzahl, fragefeld);
+            antwortRichtig = eineFrageStellen(rand() % anzahl, fragefeld);
+             statistik.anzahlGestellt ++;
+                if (antwortRichtig)
+                    statistik.anzahlRichtig ++;
             break;
         case 3:
+            #ifndef DATEINAME
+                strcpy (dateiname, "");
+                printf ("Bitte den Dateinamen eingeben:\n");
+                scanf ("%s", dateiname);
+                 while (getchar()!= '\n');
+            #endif
+            printf ("Lade Daten aus %s\n", dateiname);
             anzahl = feld_laden_aus_datei(dateiname, fragefeld);
             clearScreen();
             printf("Es wurden %i Fragen geladen\n", anzahl);
             break;
         case 9:
-            while (input)
-            {
-                clearScreen();
-                printf("1 vordefinierte Fragen einlesen\n");
-                printf("2 bestimme Frage stellen\n");
-                printf ("0 Ende");
-                scanf("%i", &input);
-                while (getchar() != '\n')
-                {
-                };
-                switch (input)
-                {
-                case 1:
-                    anzahl = feld_laden (fragefeld);
-                    break;
-                case 2:
-                    scanf("%i", &input);
-                    while (getchar() != '\n');
-                    eineFrageStellen (input, fragefeld);
-                    break;
-                case 3:
-                   
-                    break;
-                default:
-                    break;
-                }
-               
-            }
-             input = -1;
+            input = debugMenu(fragefeld, &anzahl);
+            input = -1;
         }
     }
     return 0;
 }
 
+short debugMenu(t_fragefeld fragefeld, short *p_anzahl)
+{
+    int input;
+    short anzahl = *p_anzahl;
+    while (input)
+    {
+        clearScreen();
+        printf("1 vordefinierte Fragen einlesen\n");
+        printf("2 bestimme Frage stellen\n");
+        printf("0 Ende");
+        scanf("%i", &input);
+        while (getchar() != '\n')
+        {
+        };
+        switch (input)
+        {
+        case 1:
+            anzahl = feld_laden(fragefeld);
+            break;
+        case 2:
+            printf ("Welche Frage soll gestellt werden?\n");
+            scanf("%i", &input);
+            while (getchar() != '\n')
+                ;
+            eineFrageStellen(input, fragefeld);
+            break;
+        case 3:
+
+            break;
+        default:
+            break;
+        }
+    }
+    *p_anzahl = anzahl;
+    return input;
+}
+
+/*
+Laedt eine Reihe vorgefertigter Fragen
+*/
 unsigned short int feld_laden(char fragefeld[][2][81])
 {
     int i = 0;
@@ -112,41 +158,27 @@ unsigned short int feld_laden(char fragefeld[][2][81])
 */
 short int eineFrageStellen(short int eintrNr, t_fragefeld fragefeld)
 {
-    char antw[81], tmp, tmpStr [81];
+    char antw[81], tmp, tmpStr[81];
     short int falsch = 1;
     char command[80], *pSTr;
     FILE *output;
     //prüfen ob die Frage erst noch generiert werden muss
     if (fragefeld[eintrNr][0][0] == '#')
-    {
-        //printf ("strat\n");
-        pSTr = strtok(fragefeld[eintrNr][0], "#");
-        strcpy(command, "gcc ");
-        strcat(command, strtok(pSTr, "\n"));
-        strcat(command, " -o extraProg.exe");
-        system(command);
-        //system ("extraProg.exe");   //.\extraProg.exe > test.txt
-        output = _popen("extraProg.exe", "r");
-        fgets(fragefeld[eintrNr][0], 80, output);
-        fragefeld[eintrNr][0][strlen(fragefeld[eintrNr][0]) - 1] = '\0'; //\n weg
-        fgets(fragefeld[eintrNr][1], 80, output);
-        strtok(fragefeld[eintrNr][1], "\n"); //\n weg alternativ
-        _pclose(output);
-    }
-
+        eineFrageErzeugen (strtok (fragefeld [eintrNr] [0], "#"), fragefeld [eintrNr] [0], fragefeld [eintrNr] [1]);
     //zu einem Eintrag Frage stellen
     printf("Frage%i: %s\n", eintrNr, fragefeld[eintrNr][0]);
-
     //Antwort einlesen
-    fgets (antw, 80, stdin);
-    antw [strlen (antw) -1] = '\0';
+    fgets(antw, 80, stdin);
+    antw[strlen(antw) - 1] = '\0';
     //vergleichen
     falsch = strcmp(fragefeld[eintrNr][1], antw);
     //Wenn Richtig mitteilen sonst korrekt hinschreiben
     if (!falsch)
-        printf("ok\n");
+        //printf("ok\n");
+        printf("%s\n", RICHTIGE_ANTWORT);
     else
-        printf("Nope: %s\n", fragefeld[eintrNr][1]);
+        //printf("Nope: %s\n", fragefeld[eintrNr][1]);
+        printf("%s: %s\n", FALSCHE_ANTWORT, fragefeld[eintrNr][1]);
     return !falsch;
 }
 
@@ -159,7 +191,10 @@ short int feld_laden_aus_datei(char dateiname[80], t_fragefeld feld)
     //Textdatei öffnen
     file = fopen(dateiname, "r");
     if (!file)
+    {
+        printf ("%s: nicht gefunden oder Ressource ist bereits belegt!\n", dateiname);
         return -1;
+    }
     //Fragezeile dann Antwortezeile laden
     while (fgets(buff, 80, file) != NULL && i < 200)
     {
@@ -179,10 +214,27 @@ short int feld_laden_aus_datei(char dateiname[80], t_fragefeld feld)
     return i;
 }
 
+short eineFrageErzeugen (char *target, char *frage, char *antwort)
+{
+    char command [80];
+    FILE *output;
+        strcpy (command, "gcc ");
+        strcat (command, strtok (target, "\n"));
+        strcat (command, " -o extraProg.exe");
+        system (command);
+        output = _popen ("extraProg.exe", "r");
+        fgets (frage, 80, output);
+        frage [strlen (frage) - 1] = '\0';
+        fgets (antwort, 80, output);
+        strtok (antwort, "\n");
+        _pclose (output);
+    return 0;
+}
+
 void clearScreen()
 {
     printf("Enter...\n");
     getchar();
-    system("cls");
+    system(CLS);
     return;
 }
