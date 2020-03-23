@@ -1,4 +1,4 @@
-#p1.C
+#p1.c
 Droelf
 Welcher Buchstabe kommt nach A?
 B

@@ -1,6 +1,6 @@
-#p1.C
+#p1.c
 Droelf
-#p2.C
+#p2.c
 Zwuenf
 Welcher Buchstabe kommt nach A?
 B

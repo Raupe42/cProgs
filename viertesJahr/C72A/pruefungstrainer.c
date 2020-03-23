@@ -14,10 +14,19 @@ Zum compilieren lediglich diese Datei mit gcc aufrufen.
 
 #ifdef UNIX
 #define CLS "clear"
+#define PFIX "out"
+#define POPEN popen
+#define PCLOSE pclose
 #elif unix
 #define CLS "clear"
+#define PFIX "out"
+#define POPEN popen
+#define PCLOSE pclose
 #else
 #define CLS "cls"
+#define PFIX "exe"
+#define POPEN _popen
+#define PCLOSE _pclose
 #endif
 
 #define MAX_ANZAHL 200
@@ -70,10 +79,15 @@ int main(void)
             break;
         case 2:
             srand(time(NULL));
-            antwortRichtig = eineFrageStellen(rand() % anzahl, fragefeld);
-             statistik.anzahlGestellt ++;
+            if (anzahl)
+            {
+                antwortRichtig = eineFrageStellen(rand() % anzahl, fragefeld);
+                statistik.anzahlGestellt ++;
                 if (antwortRichtig)
                     statistik.anzahlRichtig ++;
+            }
+            else
+                printf ("Bitte erst Frage einlesen...\n");
             break;
         case 3:
             #ifndef DATEINAME
@@ -220,14 +234,17 @@ short eineFrageErzeugen (char *target, char *frage, char *antwort)
     FILE *output;
         strcpy (command, "gcc ");
         strcat (command, strtok (target, "\n"));
-        strcat (command, " -o extraProg.exe");
+        strcat (command, " -o extraProg.");
+        strcat (command, PFIX);
         system (command);
-        output = _popen ("extraProg.exe", "r");
+        strcpy (command, "./extraProg.");
+        strcat (command, PFIX);
+        output = POPEN (command, "r");
         fgets (frage, 80, output);
         frage [strlen (frage) - 1] = '\0';
         fgets (antwort, 80, output);
         strtok (antwort, "\n");
-        _pclose (output);
+        PCLOSE (output);
     return 0;
 }
 
