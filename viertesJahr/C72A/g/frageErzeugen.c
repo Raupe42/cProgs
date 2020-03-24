@@ -85,7 +85,6 @@ short int eineFrageStellen (short int eintrNr, t_fragefeld fragefeld )  //ANPASS
 {
     char antw [81];
     short int falsch = 1;
-    char msg [100];
 
     //prüfen ob die Frage erst noch generiert werden muss
     if (fragefeld [eintrNr] [0] [0] == '#')
@@ -115,12 +114,12 @@ short int eineFrageStellen (short int eintrNr, t_fragefeld fragefeld )  //ANPASS
 int main (void)
 {
     short int anzahl;
-    int i;
     char fragefeld [MAX_ANZAHL] [2] [81];
     //anzahl = feld_laden (fragefeld);
     anzahl = feld_laden_aus_datei ("Fragen.txt", fragefeld);
     //srand (time(NULL));
     //    eineFrageStellen (rand()%anzahl, fragefeld);
+    printf ("%i Fragen geladen...\n", anzahl);
     eineFrageStellen (0, fragefeld);
     return 0;
 }
@@ -133,7 +132,7 @@ short int feld_laden_aus_datei (char dateiname [80], t_fragefeld feld)
 {   
     FILE *file;
     char buff  [81];
-    int i = 0, j = 0, len;
+    int i = 0, j = 0;
     //Textdatei öffnen
     file = fopen (dateiname, "r");
     if (!file)

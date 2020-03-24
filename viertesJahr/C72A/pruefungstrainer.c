@@ -55,7 +55,6 @@ int main(void)
     short int anzahl = 0, antwortRichtig;
     int i, input = -1;
     char fragefeld[MAX_ANZAHL][2][81], dateiname[100] = DATEINAME;
-    FILE *file;
     t_statistik statistik;
     while (input)
     {
@@ -72,10 +71,12 @@ int main(void)
         {
         case 1:
             for (i = 0; i < anzahl; i++)
+            {
                 antwortRichtig = eineFrageStellen(i, fragefeld);
                 statistik.anzahlGestellt ++;
                 if (antwortRichtig)
                     statistik.anzahlRichtig ++;
+            }
             break;
         case 2:
             srand(time(NULL));
@@ -172,10 +173,8 @@ unsigned short int feld_laden(char fragefeld[][2][81])
 */
 short int eineFrageStellen(short int eintrNr, t_fragefeld fragefeld)
 {
-    char antw[81], tmp, tmpStr[81];
+    char antw[81];
     short int falsch = 1;
-    char command[80], *pSTr;
-    FILE *output;
     //prüfen ob die Frage erst noch generiert werden muss
     if (fragefeld[eintrNr][0][0] == '#')
         eineFrageErzeugen (strtok (fragefeld [eintrNr] [0], "#"), fragefeld [eintrNr] [0], fragefeld [eintrNr] [1]);
@@ -201,7 +200,7 @@ short int feld_laden_aus_datei(char dateiname[80], t_fragefeld feld)
 {
     FILE *file;
     char buff[81];
-    int i = 0, j = 0, len;
+    int i = 0, j = 0;
     //Textdatei öffnen
     file = fopen(dateiname, "r");
     if (!file)
@@ -237,7 +236,13 @@ short eineFrageErzeugen (char *target, char *frage, char *antwort)
         strcat (command, " -o extraProg.");
         strcat (command, PFIX);
         system (command);
-        strcpy (command, "./extraProg.");
+        strcpy (command, "");
+        #ifdef UNIX
+            strcat (command, "./");
+        #elif unix
+            strcat (command, "./");
+        #endif
+        strcat (command, "extraProg.");
         strcat (command, PFIX);
         output = POPEN (command, "r");
         fgets (frage, 80, output);
