@@ -1,0 +1,12 @@
+1a) siehe Programmdatei
+1b) siehe Programmdatei
+1c) siehe Programmdatei
+1d) siehe Programmdatei
+    Es werden leere Dateien erzeugt.
+2a) siehe Programmdatei
+    Nach 65534 offnen Dateiein kommt die Meldung "Too many open files"
+    Entsprechend dem Fehlercode ENFILE
+    Der Test wurde auf dem Unix WSL Server in Windows durchgeführt.
+2b) Ich habe es versucht, nur reicht mein Wissen ueber Linux nicht aus, um eine Vielzahl der Fehler zu erzeugen. 
+Weitere Ideen hatte ich leider nicht. Auch verstehe ich nicht, warum dieselbe Datei durch einen Handle 
+mehrfach mit schreibrechten geoeffnet werden kann.
