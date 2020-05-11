@@ -1,0 +1,8 @@
+Eingabe: C:\Users\jensh\OneDrive\Dokumente\Git\cProgs\viertesJahr\Uebung\Uebung1\a.exe3plus3
+Ausgabe: -3
+Eingabe: C:\Users\jensh\OneDrive\Dokumente\Git\cProgs\viertesJahr\Uebung\Uebung1\a.exe3plus8
+Ausgabe: -3
+Eingabe: C:\Users\jensh\OneDrive\Dokumente\Git\cProgs\viertesJahr\Uebung\Uebung1\a.exe4plus8
+Ausgabe: -4
+Eingabe: C:\Users\jensh\OneDrive\Dokumente\Git\cProgs\viertesJahr\Uebung\Uebung1\a.exe4minus8
+Ausgabe: 4

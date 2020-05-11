@@ -1,0 +1,22 @@
+Aufgabe:
+Es soll ein Prgramm angelegt werden, dass über Aufrufargumente
+gesteuert eine Rechnung durchführt.
+Ausserdem soll jede Eingabe und das Ergebnis mit aktueller
+Zeit in einer log.txt abgelegt werden. Da es eine Log Datei ist,
+soll die Zahl hochgezählt und die Datei immer weiter geführt werden.
+Ein-Ausgabe:
+prog.exe 3 minus 4.5
+Ausgabe: -1.5
+
+ 
+
+später
+prog.exe 6 mal 3
+Ausgabe: 18
+Datei:
+Eingabe 1: 3 - 4.5
+Ausgabe 1: -1.5
+Am 02.05.2020 (Samstag) 15 Uhr 14
+Eingabe 2: 6 * 3
+Ausgabe 2: 18
+Am 02.05.2020 (Samstag) 15 Uhr 19
